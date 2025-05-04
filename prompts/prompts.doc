@@ -1,0 +1,204 @@
+I want a front end that:
+- Renders the **entire** content of my markdown file (`credit_analysis.md`) as collapsible, navigable panels.
+- Sidebar navigation links to every section/subsection; sidebar is always vertical/sticky on desktop, scrollable if needed.
+- Highlights only key metrics, key phrases, and key insights—those most important for a fast-scanning reader—using an **explicit, curated list** (no single-word or regex highlights). Highlighting should serve as a visual guide to the most critical content for decision-makers or analysts scanning quickly.
+- All CSS/JS is referenced relatively, with clear documentation and error logs.
+- The UI is modern, readable, and easy to audit/extend.
+
+**Design & UX Requirements:**
+- Use a modern, professional color palette (white, dark blue, light gray, and a distinct accent color for highlights).
+- Use a clean, readable font (Inter, Roboto, or Lato) with clear hierarchy (large headers, comfortable line spacing).
+- Sticky, vertical sidebar navigation that remains visible as the user scrolls, with clear active section highlighting and subtle icons for each section.
+- Sidebar is always vertical and sticky on desktop (width > 700px), only collapsing to a top bar on mobile; sidebar is scrollable if content overflows.
+- Sidebar header and controls must be visually distinct and not cramped.
+- Each section/subsection is a collapsible card/panel with subtle shadows or borders for separation and depth.
+- Collapsible sections have animated expand/collapse transitions and arrow indicators that rotate to show open/closed state.
+- Sidebar navigation is fully interactive:
+    - Clicking a sidebar link always opens the correct section (and closes all others) with a single click—no double-clicking required.
+    - As the user scrolls, the sidebar highlights the active section and ensures it is open.
+- Add gentle hover effects to navigation links and section headers for interactivity.
+- For highlights, use consistent, visually distinct background colors for key metrics, risk factors, mitigants, and key insights. Show a tooltip on hover explaining each highlight type.
+- Implement smooth scroll-to-section animation when navigation links are clicked.
+- Add a “Back to Top” floating button and an “Expand All/Collapse All” control for user convenience.
+- The main file should be named index.html and all CSS/JS should be referenced relatively for easy local preview.
+- After building, provide clear instructions on how to preview the site in the browser.
+
+**Highlight List (Explicit, Curated):**
+Highlighting is strictly limited to the following high-value scan targets for a fast-scanning reader:
+
+**Key Metrics & Financials**
+- Net Debt/EBITDA
+- EBITDA Margin
+- Interest Coverage
+- Free Cash Flow (FCF)
+- Revenue Growth
+- 2024 Revenue
+- 2025 Revenue
+- Cash on Hand
+- Debt Outstanding
+- Operating Cash Flow
+- Gross Margin
+- Contracted Backlog
+- Lease Obligations
+- Capital Expenditures (Capex)
+- Fixed-Charge Coverage
+- Depreciation and Amortization
+- Sales & Marketing Expense
+- General & Administrative
+- R&D (Research & Development)
+- Equipment Leasing
+- Capital Structure
+- Cost Structure
+- Operating Leverage
+- Variable Costs
+- Fixed Costs
+- Profitability
+- Cash Earnings
+- Interest Expense
+- Lease Payments
+- Utilization
+- P&L (Profit & Loss)
+- Corporate Infrastructure
+
+**Key Risks**
+- Customer Concentration
+- High Leverage
+- Execution Risk
+- Liquidity Risk
+- Refinancing Risk
+- Supplier Risk (Nvidia Dependency)
+- Regulatory and Geopolitical Risks
+- Technology/Execution Risk
+- Economic Cyclicality
+- Competition and Pricing
+- Commodity and Input Costs
+- Lease Obligations
+- Covenant Breach
+- Bankruptcy
+- Liquidity Squeeze
+- Thin Margin for Financial Error
+- Funding Risk
+- Debt Service
+- Cash Flow Underperformance
+- Market Access Risk
+
+**Key Mitigants**
+- Contracted Backlog
+- Loans Secured by NVIDIA GPUs
+- Upfront Customer Payments
+- IPO Proceeds
+- Flexible Capex
+- Strong Backers
+- Multi-Year Revenue Visibility
+- Asset Collateralization
+- Prepaid Contracts
+- Credit Support
+- Long-Term Contracts
+- Cash Reserves
+- Financial Hedges
+
+**Key Insights / Recommendations**
+- Extreme caution to lenders
+- Exposure should be secured and covenant-heavy
+- Avoid unsecured lending absent significant improvement in diversification and cash flows
+- Seek covenants around leverage, minimum liquidity, and limitations on additional debt
+- Credit outlook is fragile
+- Revisit stance if CoreWeave diversifies customer base and generates consistent free cash flow
+- Boom conditions can normalize
+- Importance of deleveraging during high-growth phase
+- Prudent credit assessment assumes more normalized market conditions
+- Profitability will improve markedly as revenue scales
+- Fixed costs will strain the P&L if utilization falters
+- Heavy spending required to deploy GPU hardware and maintain facilities
+
+**Implementation Details:**
+- On sidebar link click:
+    1. Immediately close all sections.
+    2. Immediately open the target section.
+    3. Smoothly scroll to the target section using `scrollIntoView`.
+    4. Immediately update the sidebar highlight.
+- On scroll, only update the sidebar highlight (not open/close state).
+- Only highlight the above **explicit, curated phrases** for key metrics, key phrases, and key insights. Do not highlight single words or use broad regexes (e.g., do not highlight every instance of "debt" or "risk").
+- The highlight phrase list is focused on high-value scan targets, easily editable in the code, and documented in the README.
+- Use exact, case-insensitive, whole-phrase matching for all highlights.
+- Each highlight type (metric, risk, mitigant, insight) must have a distinct color and tooltip.
+- The entire content of `credit_analysis.md` must be rendered, not summarized or re-mapped.
+- All markdown sections/subsections are collapsible and navigable.
+- All original text, tables, and lists are preserved as HTML.
+
+**Local Server Setup & Troubleshooting Checklist (for Local Preview):**
+
+To ensure smooth local preview and avoid common issues with Python HTTP server:
+
+1. **Start the Server:**
+   - From your project directory, run:
+     ```sh
+     python3 -m http.server 8000
+     ```
+   - If you see `Serving HTTP on :: port 8000 ...`, your server is running and you can preview at [http://localhost:8000](http://localhost:8000).
+
+2. **If You Get `OSError: [Errno 48] Address already in use`:**
+   - Another process is using port 8000. To free the port:
+     1. Find the process:
+        ```sh
+        lsof -i :8000
+        ```
+     2. Kill the process (replace `<PID>` with the actual number):
+        ```sh
+        kill -9 <PID>
+        ```
+     3. Confirm it's gone:
+        ```sh
+        lsof -i :8000
+        ```
+        (Should return nothing.)
+     4. Restart the server:
+        ```sh
+        python3 -m http.server 8000
+        ```
+
+3. **If Port 8000 Remains Unavailable:**
+   - Try a different port (e.g., 8080):
+     ```sh
+     python3 -m http.server 8080
+     ```
+   - Then preview at [http://localhost:8080](http://localhost:8080).
+
+4. **File Checklist:**
+   - Ensure all files are present in your project directory:
+     - `index.html`
+     - `main.js`
+     - `styles.css`
+     - `credit_analysis.md`
+   - All dependencies must be referenced with relative paths in `index.html`.
+
+5. **If You See a Blank Page:**
+   - Open the browser’s developer console (F12 or right-click → Inspect → Console).
+   - Look for errors (e.g., failed fetch, JS errors, 404s).
+   - Check the “Network” tab to see if all files load with status 200.
+   - Most issues are due to missing files, wrong paths, or a server not running.
+
+6. **Browser Preview:**
+   - If using a preview tool, ensure your local server is running and accessible at the expected port.
+   - If you change the port, update the preview URL accordingly.
+
+7. **General Best Practices:**
+   - Always stop any previous server before starting a new one on the same port.
+   - Document these steps in your README and prompts for future reference.
+
+**Copy-paste this checklist into future projects to avoid local preview issues!**
+
+**Best Practices:**
+- Highlighting should never be exhaustive or decorative—only guide attention to the most critical content.
+- Avoid broad highlight patterns; use only explicit, high-value phrases.
+- Always test sidebar layout and scrollability on both desktop and mobile.
+- Document all logic and UX rules in README and prompts.doc for future reference.
+- Annotate code heavily for audit and troubleshooting.
+
+
+
+
+Now id like to generalize this a bit and create an agent that generates credit analysis on a company and renders the analysis in a web app as we built. The idea would be to have a front end that lets you type in a company name. that triggers a reasoning model to generate the analysis and then the next step is to render in a web format like this. 
+
+
+

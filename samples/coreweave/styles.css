@@ -1,0 +1,381 @@
+/* Static fallback CSS for CoreWeave analysis demo. Copied from project root for demo safety. */
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: #f8fafc;
+  color: #222;
+}
+
+#app {
+  display: flex;
+  min-height: 100vh;
+}
+
+#sidebar {
+  background: #1e2a38;
+  color: #fff;
+  width: 240px;
+  min-width: 200px;
+  padding: 24px 0 0 0;
+  box-shadow: 2px 0 8px rgba(30,42,56,0.06);
+  /* --- Sidebar is now fixed for auditability and UX --- */
+  position: fixed; /* Changed from sticky to fixed for true pinning */
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1000; /* Ensures sidebar stays above main content */
+}
+
+#sidebar nav ul {
+  list-style: none;
+  padding: 0 0 0 24px;
+  margin: 0;
+}
+
+#sidebar nav ul li {
+  margin-bottom: 16px;
+}
+
+#sidebar nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+#sidebar nav ul li a:hover,
+#sidebar nav ul li a.active {
+  color: #60a5fa;
+}
+
+#content {
+  flex: 1;
+  padding: 40px 32px;
+  max-width: 900px;
+  margin-left: 240px; /* Ensures content is not hidden under fixed sidebar */
+}
+
+.collapsible {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(30,42,56,0.06);
+  margin-bottom: 32px;
+  padding: 24px 32px 16px 32px;
+  border-left: 4px solid #2563eb;
+  transition: box-shadow 0.2s;
+}
+
+.collapsible h2 {
+  margin-top: 0;
+  font-size: 1.3em;
+  color: #1e2a38;
+  cursor: pointer;
+}
+
+.collapsible.open {
+  box-shadow: 0 4px 16px rgba(30,42,56,0.08);
+}
+
+.collapsible ul {
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+/* --- Tasteful Table & Chart Polish (template/agent-ready) --- */
+.financial-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(30,42,56,0.10);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 32px 0 16px 0;
+  font-size: 1.09em;
+  transition: box-shadow 0.2s;
+}
+.financial-table caption {
+  caption-side: top;
+  font-weight: bold;
+  font-size: 1.15em;
+  color: #1e2a38;
+  padding: 18px 0 10px 0;
+  letter-spacing: 0.02em;
+}
+.financial-table thead th {
+  background: linear-gradient(90deg, #2563eb 80%, #60a5fa 100%);
+  color: #fff;
+  font-weight: 700;
+  padding: 16px 10px 16px 10px;
+  border-bottom: 2px solid #1e2a38;
+  text-align: center;
+  position: relative;
+}
+.financial-table thead th .th-icon {
+  font-size: 1.07em;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.financial-table tbody td {
+  padding: 13px 10px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: transparent;
+}
+.financial-table tbody tr:nth-child(even) {
+  background: #f3f6fa;
+}
+.financial-table tbody tr:hover {
+  background: #e0e7ef;
+}
+.financial-table td, .financial-table th {
+  transition: background 0.2s;
+}
+.financial-table td[aria-label]:hover::after, .financial-table th[aria-label]:hover::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: 50%;
+  top: 125%;
+  transform: translateX(-50%);
+  background: #1e2a38;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 5px;
+  font-size: 0.98em;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(30,42,56,0.15);
+}
+.financial-table tbody td:hover, .financial-table thead th:hover {
+  background: #dbeafe;
+}
+.financial-table tbody td:hover::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #dbeafe33;
+  pointer-events: none;
+}
+.chart-container {
+  box-shadow: 0 1px 8px rgba(30,42,56,0.08);
+  border-radius: 10px;
+  background: #fff;
+  padding: 18px 12px 6px 12px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chart-label {
+  display: block;
+  text-align: center;
+  font-size: 1.09em;
+  color: #374151;
+  font-weight: 500;
+  margin: 10px 0 18px 0;
+  letter-spacing: 0.01em;
+}
+
+/* Customer Mix Pie Chart: Compact Sizing */
+.chart-container.compact-pie {
+  max-width: 280px;
+  max-height: 220px;
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .financial-table {
+    font-size: 0.99em;
+  }
+  .chart-container {
+    padding: 8px 2px 2px 2px;
+    border-radius: 7px;
+  }
+  .chart-container.compact-pie {
+    max-width: 98vw;
+    max-height: 180px;
+  }
+}
+
+@media (max-width: 700px) {
+  #app {
+    flex-direction: column;
+  }
+  #sidebar {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    position: static;
+    box-shadow: none;
+    padding: 16px 0 0 0;
+  }
+  #content {
+    padding: 24px 8px;
+    margin-left: 0; /* Reset margin-left for mobile layout */
+  }
+}
+
+/* Moody's-Style Title Slide (template/agent-ready) */
+.title-slide {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  background: linear-gradient(135deg, #003366 60%, #4f6d8a 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s;
+  font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+  box-shadow: 0 0 0 1px #002244;
+}
+.title-slide-content {
+  text-align: center;
+  max-width: 90vw;
+}
+.title-slide-heading {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 2.2rem;
+  color: #fff;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.18), 0 1px 0 #002244;
+}
+.title-slide-btn {
+  font-size: 1.25rem;
+  background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.17);
+  padding: 0.9em 2.3em;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 0.5em;
+}
+.title-slide-btn:hover, .title-slide-btn:focus {
+  background: linear-gradient(90deg, #2563eb 80%, #1e40af 100%);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.20);
+}
+body.title-slide-active #app,
+body.title-slide-active aside,
+body.title-slide-active main {
+  filter: blur(6px) grayscale(0.25) brightness(0.7);
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 700px) {
+  .title-slide-heading {
+    font-size: 1.5rem;
+  }
+  .title-slide-content {
+    padding: 0 1em;
+  }
+  .title-slide-btn {
+    font-size: 1rem;
+    padding: 0.7em 1.4em;
+  }
+}
+
+/* Agentic Process Modal & Button Styles */
+.build-any-company-container {
+  display: flex;
+  justify-content: center;
+  margin: 2.5em 0 1.5em 0;
+}
+.build-any-company-btn {
+  background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  padding: 0.8em 2em;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.build-any-company-btn:hover, .build-any-company-btn:focus {
+  background: linear-gradient(90deg, #2563eb 80%, #1e40af 100%);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+.agentic-modal {
+  position: fixed;
+  z-index: 10001;
+  inset: 0;
+  background: rgba(0, 38, 66, 0.82);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+}
+.agentic-modal-content {
+  background: #fff;
+  color: #1e293b;
+  border-radius: 14px;
+  padding: 2.2em 2.5em;
+  max-width: 420px;
+  width: 96vw;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  text-align: left;
+  outline: none;
+}
+.agentic-modal-content h2 {
+  margin-top: 0;
+  color: #003366;
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-bottom: 1.2em;
+}
+.agentic-stepper {
+  margin: 0 0 1.5em 0;
+  padding-left: 1.2em;
+}
+.agentic-stepper li {
+  margin-bottom: 0.7em;
+  font-size: 1.06rem;
+}
+.launch-agent-btn {
+  background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 7px;
+  padding: 0.7em 1.7em;
+  margin-right: 0.7em;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.launch-agent-btn:hover, .launch-agent-btn:focus {
+  background: linear-gradient(90deg, #2563eb 80%, #1e40af 100%);
+}
+.close-modal-btn {
+  background: #e5e7eb;
+  color: #1e293b;
+  font-size: 1.08rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 7px;
+  padding: 0.7em 1.7em;
+  cursor: pointer;
+  margin-left: 0.7em;
+  transition: background 0.18s;
+}
+.close-modal-btn:hover, .close-modal-btn:focus {
+  background: #cbd5e1;
+}
+@media (max-width: 700px) {
+  .agentic-modal-content {
+    padding: 1.2em 0.5em;
+    font-size: 0.99rem;
+  }
+  .build-any-company-btn, .launch-agent-btn, .close-modal-btn {
+    font-size: 0.99rem;
+    padding: 0.6em 1.1em;
+  }
+}

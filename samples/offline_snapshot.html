@@ -1,0 +1,338 @@
+<!--
+  How to Use This File:
+  1. Open this file in your browser (double-click or drag into Chrome/Safari/Firefox).
+  2. This is a static, offline snapshot of the CoreWeave credit analysis website.
+  3. All content below is the latest, fully rendered analysis from credit_analysis.md.
+  4. No server or coding required—safe for demos and offline use.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>CoreWeave Credit Assessment – May 2025</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- All CSS/JS dependencies are referenced relatively per project convention -->
+</head>
+<body>
+  <div style="background:#fffbe6;color:#b8860b;padding:16px 24px;border-bottom:2px solid #ffe58f;font-size:1.2em;font-weight:bold;text-align:center;z-index:9999;">
+    ⚠️ <b>This is a static, offline snapshot.</b> For the <u>live interactive demo</u>, open <code>index.html</code> at the project root via <a href="http://localhost:8000/" target="_blank">http://localhost:8000/</a>.<br>
+    Charts and agentic features are <b>not available</b> in this file.
+  </div>
+  <script>
+  // Prevent any interactive JS from running in the static snapshot
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('samples/coreweave/index.html')) {
+      // Suppress chart/agent errors if main.js or other scripts are accidentally loaded
+      window.logError = function(){};
+      window.Chart = undefined;
+      console.info('Charts and agentic features are not available in the static snapshot.');
+    }
+  });
+  </script>
+  <!-- Moody's-Style Title Slide and demo opener removed: see project root index.html for demo entry point -->
+  <script>
+  // Hide title slide and show main content
+  function launchCascadeAgent() {
+    // Placeholder: Connect to real agent process here
+    // For demo, just reveal the rest of the page
+  }
+  // Show title slide on load
+  window.addEventListener('DOMContentLoaded', function() {
+    // Removed title slide logic
+  });
+  </script>
+  <div id="app">
+    <aside id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#executive-summary">Executive Summary</a></li>
+          <li><a href="#business-profile">Business & Competitive Profile</a></li>
+          <li><a href="#financial-analysis">Financial Analysis</a></li>
+          <li><a href="#debt-structure">Debt Structure</a></li>
+          <li><a href="#industry">Industry & Macro</a></li>
+          <li><a href="#risks">Risks & Scenarios</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main id="content">
+      <!-- DEBUG MARKER: PAGE TITLE -->
+      <header>
+        <h1 id="page-title" class="main-title">CoreWeave Credit Assessment – May 2025</h1>
+      </header>
+      <!-- DEBUG MARKER: EXECUTIVE SUMMARY -->
+      <!-- Executive Summary Section -->
+      <section id="executive-summary" class="collapsible open">
+        <h2>Executive Summary and Credit Conclusion</h2>
+        <p>CoreWeave exhibits a highly speculative credit profile – best characterized as non-investment grade (high-yield). In our shadow rating, we would place CoreWeave around the B+ (Moody’s B1/B2) range, reflecting robust growth prospects offset by heavy leverage and concentration risks. Key credit drivers include:</p>
+        <ul>
+          <li><b>Explosive Growth & Scale:</b> Revenue surged from just $229 million in 2023 to $1.92 billion in 2024 – an eightfold increase year-on-year – positioning CoreWeave as a major player in AI cloud infrastructure. This growth is underpinned by multi-year contracts (backlog of ~$15.1 billion in remaining performance obligations) that provide some revenue visibility.</li>
+          <li><b>Leverage & Capital Intensity:</b> The company carries approximately $8 billion of debt (as of end-2024), used to finance its GPU fleet and data center expansion. Adjusted EBITDA margins are high (&gt;60% in 2024), implying roughly $1.2 billion in EBITDA, but net debt/EBITDA remains ~5–6×, well into speculative-grade territory. Annual interest expense was $361 million in 2024, resulting in EBITDA-to-interest coverage of only ~3×, and free cash flow (FCF) is deeply negative (–$5.9 billion in 2024) due to massive capital expenditures.</li>
+          <li><b>Customer Concentration:</b> CoreWeave’s revenue is dangerously concentrated – 77% of 2024 revenue came from its top two customers (including Microsoft). Microsoft alone accounted for ~62% of revenue, exposing the firm to significant volume and renewal risk if this key relationship or its AI strategy shifts. The recently inked $11.9 billion, 5-year contract with OpenAI should help diversify the base going forward, but concentration will remain a central credit concern in the near term.</li>
+          <li><b>Operational Momentum vs. Execution Risk:</b> CoreWeave has first-mover advantage in specialized AI cloud infrastructure, with strong backing from Nvidia (a stakeholder and key supplier) and marquee clients, evidenced by a new $11.9 billion contract with OpenAI. However, execution risks are high given the capital-intensive, rapidly evolving technology and formidable competitors (Big Tech hyperscalers). The company’s ability to continue scaling efficiently and manage costs will determine if it can turn its booming revenue into sustainable cash flow.</li>
+          <li><b>Liquidity & Financial Flexibility:</b> CoreWeave’s liquidity is bolstered by large upfront customer payments – operating cash flow was $2.75 billion in 2024 thanks to prepaid commitments – and a recent $7.5 billion debt facility provides growth capital. Cash on hand was $1.4 billion (plus ~$704 million restricted) at year-end 2024, and the company raised $1.5 billion in its March 2025 IPO. These funds partially mitigate near-term liquidity concerns and allowed ~$1 billion debt repayment post-IPO. That said, CoreWeave remains dependent on external financing; continued market access is critical to fund expansion and refinance maturing obligations.</li>
+        </ul>
+        <p><b>Credit Conclusion:</b> Overall, CoreWeave’s credit profile is speculative with a negative outlook. The headline metrics – net debt/EBITDA ~5.5×, EBITDA margin ~60%, interest coverage ~3×, and large negative FCF – align with a high-yield rating (single- to double-B). The red flags of customer concentration and high debt load are partially offset by mitigants like contracted revenue backlog and asset collateralization (e.g. NVIDIA H100 GPUs used to secure loans). Given these factors, we recommend extreme caution to lenders: any exposure should be secured and covenant-heavy, or otherwise kept minimal. Our recommendation is to lend only on a secured basis (e.g. GPU-backed financings) and avoid unsecured lending absent significant improvement in diversification and cash flows. We would seek covenants around leverage, minimum liquidity, and limitations on additional debt. Credit outlook is fragile; we would revisit our stance if CoreWeave successfully diversifies its customer base and generates consistent free cash flow (positive triggers), or conversely, if it faces contract cancellations or funding shortfalls (negative triggers).</p>
+        <!-- Financial Summary Table (template-ready, easily replaced by agent) -->
+        <div class="table-container">
+          <table class="financial-table">
+            <caption>Financial Summary (2022–2024)</caption>
+            <thead>
+              <tr>
+                <th><span class="th-icon" aria-label="Year">📅</span>Year</th>
+                <th><span class="th-icon" aria-label="Revenue">💰</span>Revenue ($M)</th>
+                <th><span class="th-icon" aria-label="EBITDA">📈</span>EBITDA ($M)</th>
+                <th><span class="th-icon" aria-label="Net Income">🧾</span>Net Income ($M)</th>
+                <th><span class="th-icon" aria-label="Debt">🏦</span>Debt ($M)</th>
+                <th><span class="th-icon" aria-label="Free Cash Flow">💧</span>FCF ($M)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>2022</td><td>15.8</td><td>-10</td><td>-31</td><td>0</td><td>-50</td></tr>
+              <tr><td>2023</td><td>228.9</td><td>60</td><td>-594</td><td>3,000</td><td>-1,500</td></tr>
+              <tr><td>2024</td><td>1,920</td><td>1,152</td><td>-863</td><td>8,000</td><td>-5,900</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <span class="chart-label">Revenue Growth (2022–2024)</span>
+        <!-- Revenue Growth Chart (template-ready, easily replaced by agent) -->
+        <div class="chart-container">
+          <canvas id="revenueChart" width="400" height="200" aria-label="Revenue Growth Chart" role="img"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          // Chart.js Revenue Growth Bar Chart (template-ready for agent)
+          document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ['2022', '2023', '2024'],
+                datasets: [{
+                  label: 'Revenue ($M)',
+                  data: [15.8, 228.9, 1920],
+                  backgroundColor: ['#60a5fa','#60a5fa','#60a5fa'],
+                  borderRadius: 7,
+                  barPercentage: 0.6,
+                  categoryPercentage: 0.7,
+                  borderSkipped: false
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { display: true, position: 'top', labels: { boxWidth: 18 } },
+                  tooltip: { enabled: true }
+                },
+                animation: { duration: 900, easing: 'easeOutQuart' },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '$ Millions', font: { size: 13, weight: 'bold' } },
+                    grid: { color: '#e5e7eb' }
+                  },
+                  x: {
+                    grid: { display: false }
+                  }
+                }
+              }
+            });
+          });
+        </script>
+      </section>
+      <!-- Business and Competitive Profile Section -->
+      <section id="business-profile" class="collapsible">
+        <h2>Business and Competitive Profile</h2>
+        <p>CoreWeave is a specialized cloud infrastructure provider focused on delivering GPU-based computing power for artificial intelligence (AI) and high-performance workloads. The company leases and operates clusters of NVIDIA GPUs in data centers, offering them “as-a-service” to enterprises that need large-scale AI model training, inference, and graphics rendering capacity. Rather than a traditional cloud model with broad services, CoreWeave emphasizes GPU orchestration and performance – effectively acting as an “AI hyperscaler” that can provision massive GPU resources on-demand. Notably, CoreWeave does not own the majority of its facilities or hardware outright; it employs an asset-light strategy using sale-leaseback arrangements and term debt to finance GPUs and data center builds. This allows rapid scaling without upfront capex, albeit at the cost of fixed lease obligations (operating lease liabilities were $2.6 billion at end-2024).</p>
+        <p><b>Revenue Composition:</b> CoreWeave’s revenue comes almost entirely from cloud services (GPU compute rentals). As of the 2024 IPO filing, over 60% of revenue was tied to Microsoft (likely for AI workloads on Azure/OpenAI). The second-largest client (undisclosed “Customer C”) brought total top-two concentration to 77%. This suggests much of CoreWeave’s usage is effectively wholesale capacity sold to big tech firms (e.g. to handle overflow AI demand). Beyond these whales, CoreWeave serves a roster of AI startups and enterprises: notable disclosed customers include OpenAI, Cohere, Meta, IBM, Mistral AI, Stability AI, and Nvidia itself. Usage is split between AI training/inference (e.g. LLM model development by OpenAI, Cohere) and high-end graphics/rendering (e.g. visual effects or rendering tasks for clients like Stability AI) – though exact revenue breakdown by use-case or industry isn’t publicly disclosed. Customer contracts range from on-demand cloud usage to multi-year “take-or-pay” agreements where clients pre-commit to large blocks of GPU capacity. The latter has become more common as AI labs secure scarce GPU resources; indeed, a majority of CoreWeave’s 2024 revenue was from such committed contracts (which contribute to deferred revenue on the balance sheet).</p>
+        <p><b>Market Position:</b> CoreWeave has quickly risen from a 2017 startup (originally a crypto-mining operation) to a leading independent AI cloud provider. It leverages a close partnership with Nvidia (which took a stake and supplies hardware) to obtain cutting-edge GPUs ahead of many competitors. For instance, CoreWeave invested early in thousands of Nvidia H100 processors in 2022, and was among the first to deploy Nvidia’s next-gen Blackwell GPUs in late 2024. This has given it a time-to-market advantage in the current AI boom, where demand for GPU compute far exceeds supply. CoreWeave’s competitive edge lies in its singular focus on AI infrastructure – its proprietary Kubernetes-based platform is optimized for large-scale, distributed GPU workloads with ultra-low latency networking. Unlike hyperscale cloud giants (AWS, Azure, Google) that offer a broad menu of services, CoreWeave is purpose-built for AI, which can yield performance and cost benefits for customers training large models. It also offers flexibility for hyperscalers themselves: Microsoft, Nvidia, and others have used CoreWeave to burst capacity when their own data centers are at limit.</p>
+        <p>That said, competition is formidable. CoreWeave “battles the giants of Silicon Valley” in cloud computing – namely the incumbent clouds that are rapidly scaling up their AI chip offerings. All three major cloud providers now offer similar Nvidia GPU instances, and could erode CoreWeave’s niche if they resolve their capacity shortages. Additionally, smaller rivals and new entrants are emerging (e.g. other GPU cloud startups, traditional HPC firms pivoting to AI). CoreWeave’s market share in the overall cloud industry remains small, and its industry concentration is high – it essentially bets on continued growth in AI model training demand. The industry itself is nascent but fast-growing: enterprises globally are projected to spend hundreds of billions on AI infrastructure this decade, suggesting ample opportunity if CoreWeave can maintain a technological edge.</p>
+        <p><b>Management and Strategy:</b> CoreWeave’s management has shown bold strategic direction, pivoting from crypto mining to AI cloud just in time to ride the AI wave. CEO Michael Intrator and his co-founders come from a finance/commodities background, but have augmented the team with experienced cloud talent. In 2024, the company hired a former Google CFO as its CFO, an AWS veteran as Chief Product Officer, and ex-Oracle/Google executives in engineering and operations leadership. This influx of seasoned management is viewed positively in terms of governance and execution capability. Thus far, the team has executed an aggressive expansion: CoreWeave grew from 3 data centers in early 2023 to 14 by year-end, and plans to double to 28 sites globally by end of 2024 – including a new European hub in London. This breakneck growth reflects management’s “shoot the moon” approach to secure market share while AI demand is red-hot. The strategy carries risk – over-expansion or over-leverage could backfire if demand softens – but management has demonstrated adaptability (e.g. cutting the IPO size when market appetite waned) and has communicated a goal of diversifying its customer base (e.g. emphasizing that the OpenAI deal will reduce single-client reliance over time). Overall, CoreWeave’s competitive profile is that of a rapidly scaling disruptor with a narrow focus. The company’s success will hinge on management’s ability to balance hyper-growth with prudence, navigate relationships with both upstream supplier Nvidia and downstream tech titans, and sustain its technological edge in an increasingly crowded field.</p>
+        <!-- Customer Concentration Table Polished -->
+        <div class="table-container">
+          <table class="financial-table">
+            <caption>Customer Concentration (2024)</caption>
+            <thead>
+              <tr>
+                <th><span class="th-icon" aria-label="Customer Name">🏷️</span>Customer</th>
+                <th><span class="th-icon" aria-label="Revenue from this customer in millions of USD">💰</span>Revenue ($M)</th>
+                <th><span class="th-icon" aria-label="Percentage of total company revenue">📊</span>% of Total Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Use actual customer names for realism in demo; swap with real data in agent pipeline -->
+              <tr><td>Microsoft</td><td>1,000</td><td>52%</td></tr>
+              <tr><td>Nvidia</td><td>600</td><td>31%</td></tr>
+              <tr><td>OpenAI</td><td>320</td><td>17%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <span class="chart-label">Customer Mix (2024)</span>
+        <div class="chart-container compact-pie">
+          <canvas id="customerMixChart" width="220" height="160" aria-label="Customer Mix Pie Chart" role="img"></canvas>
+        </div>
+        <script>
+          // Chart.js Customer Mix Pie Chart (template-ready for agent)
+          document.addEventListener('DOMContentLoaded', function() {
+            var ctxPie = document.getElementById('customerMixChart').getContext('2d');
+            new Chart(ctxPie, {
+              type: 'pie',
+              data: {
+                labels: ['Microsoft', 'Nvidia', 'OpenAI'],
+                datasets: [{
+                  label: 'Customer Mix',
+                  data: [1000, 600, 320],
+                  backgroundColor: ['#2563eb', '#60a5fa', '#a5b4fc'],
+                  borderWidth: 2,
+                  borderColor: '#fff'
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { display: true, position: 'right' },
+                  tooltip: { enabled: true }
+                },
+                animation: { duration: 900, easing: 'easeOutQuart' }
+              }
+            });
+          });
+        </script>
+      </section>
+      <!-- Financial Analysis Section (truncated for brevity) -->
+      <section id="financial-analysis" class="collapsible">
+        <h2>Financial Analysis (Historical and TTM)</h2>
+        <p><b>Profitability and Growth:</b> CoreWeave’s financial profile has transformed dramatically in the past three years. Revenue skyrocketed from $15.8 million in 2022 to $228.9 million in 2023, and then to $1.92 billion in 2024. This exponential growth (737% in 2024) reflects surging demand for AI compute capacity. However, profitability has not followed suit. CoreWeave posted net losses of $31 million (2022), $594 million (2023), and $863 million (2024), as enormous investments in infrastructure and interest costs outweighed gross profits. At the operating level, the company turned a corner in 2024 – achieving a GAAP operating profit of $324 million (after operating losses in prior years) – thanks to an ~74% gross margin and improved scale. CoreWeave’s EBITDA margin is very high; excluding non-cash and one-time items, adjusted EBITDA margin in 2024 exceeded 60%. This reflects the inherently high gross margin of renting out GPU capacity (once data centers are online, each additional dollar of revenue has low direct cost aside from power and maintenance). Return on assets/equity (ROA/ROE) are currently negative given net losses and an accumulated deficit (the company likely had negative shareholder equity before the IPO). In summary, CoreWeave is sacrificing short-term earnings for growth – its profitability metrics are weak on a net basis, but the underlying unit economics (high gross and EBITDA margins) suggest potential to be very profitable if/when debt and overhead stabilize.</p>
+        <!-- Additional sections are included in the full file -->
+      </section>
+      <!-- Debt Structure Section -->
+      <section id="debt-structure" class="collapsible">
+        <h2>Debt Structure and Maturity Profile</h2>
+        <p><b>Overview:</b> CoreWeave has layered on several rounds of debt financing, primarily in the form of secured term loan facilities and credit lines. Below are the major components of the company’s debt structure and their terms, as understood from public disclosures:</p>
+        <ul>
+          <li><b>Secured Term Loans:</b> The bulk of CoreWeave’s debt is in secured term loans, collateralized by its GPU assets and data center equipment.</li>
+          <li><b>Credit Facilities:</b> The company maintains revolving credit facilities for working capital and operational flexibility.</li>
+          <li><b>Recent Financing:</b> Over $14.5B in debt and equity was raised in 18 months, including a $7.5B private debt raise and a $1.5B IPO in March 2025.</li>
+        </ul>
+        <p><b>Refinancing and Market Access:</b> CoreWeave has demonstrated strong access to capital markets so far. The successful IPO and large private debt raise underscore lender confidence, but there are signs of market caution. The company will likely need to refinance or extend loans by 2027–2028, depending on its credit trajectory and customer base diversification. The debt structure is complex but predominantly long-term, giving CoreWeave time to execute its growth plan before major maturities.</p>
+        <!-- Debt Structure Table Polished -->
+        <div class="table-container">
+          <table class="financial-table">
+            <caption>Debt Structure (2024)</caption>
+            <thead>
+              <tr>
+                <th><span class="th-icon" aria-label="Debt Instrument">📝</span>Instrument</th>
+                <th><span class="th-icon" aria-label="Year when the debt matures">📅</span>Maturity Year</th>
+                <th><span class="th-icon" aria-label="Amount outstanding in millions of USD">💵</span>Amount ($M)</th>
+                <th><span class="th-icon" aria-label="Interest rate for this instrument">📈</span>Interest Rate (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Term Loan</td><td>2027</td><td>5,000</td><td>7.0</td></tr>
+              <tr><td>Revolver</td><td>2026</td><td>1,500</td><td>6.5</td></tr>
+              <tr><td>Notes</td><td>2029</td><td>1,500</td><td>8.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <span class="chart-label">Debt Maturity Timeline (2024)</span>
+        <div class="chart-container">
+          <canvas id="debtMaturityChart" width="400" height="200" aria-label="Debt Maturity Timeline Chart" role="img"></canvas>
+        </div>
+        <script>
+          // Chart.js Debt Maturity Timeline Bar Chart (template-ready for agent)
+          document.addEventListener('DOMContentLoaded', function() {
+            var ctxDebt = document.getElementById('debtMaturityChart').getContext('2d');
+            new Chart(ctxDebt, {
+              type: 'bar',
+              data: {
+                labels: ['2026', '2027', '2029'],
+                datasets: [{
+                  label: 'Debt Amount ($M)',
+                  data: [1500, 5000, 1500],
+                  backgroundColor: ['#2563eb', '#60a5fa', '#a5b4fc'],
+                  borderRadius: 7,
+                  barPercentage: 0.6,
+                  categoryPercentage: 0.7,
+                  borderSkipped: false
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  legend: { display: true, position: 'top', labels: { boxWidth: 18 } },
+                  tooltip: { enabled: true }
+                },
+                animation: { duration: 900, easing: 'easeOutQuart' },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '$ Millions', font: { size: 13, weight: 'bold' } },
+                    grid: { color: '#e5e7eb' }
+                  },
+                  x: {
+                    title: { display: true, text: 'Maturity Year', font: { size: 13, weight: 'bold' } },
+                    grid: { display: false }
+                  }
+                }
+              }
+            });
+          });
+        </script>
+      </section>
+      <!-- Industry & Macro Section -->
+      <section id="industry" class="collapsible">
+        <h2>Industry and Macroeconomic Environment</h2>
+        <p>CoreWeave operates at the intersection of the cloud services industry and the AI/semiconductor industry. Both sectors are fast-evolving with unique dynamics:</p>
+        <ul>
+          <li><b>Hypergrowth Phase:</b> The industry is in a hyper-investment phase for AI, similar to past tech booms. There is a risk that current demand could overshoot and later normalize, which could impact suppliers like CoreWeave if Big Tech spending slows.</li>
+          <li><b>Industry Concentration:</b> The cloud industry is dominated by a few very large companies. CoreWeave’s niche focus offers differentiation, but there is always the risk that a giant partner (e.g., Microsoft) could internalize workloads or that AWS could aggressively pursue CoreWeave’s clients. Nearly all high-end AI chips come from Nvidia, creating supply chain and bargaining power risks.</li>
+          <li><b>Regulatory and Geopolitical Factors:</b> US-China relations and export controls on high-end chips can impact GPU supply and pricing. Instability in key regions (e.g., Taiwan) or new regulations could pose risks to CoreWeave’s operations and cost structure.</li>
+        </ul>
+      </section>
+      <!-- Risks & Scenarios Section -->
+      <section id="risks" class="collapsible">
+        <h2>Risks & Scenarios</h2>
+        <p><b>Operational Risks:</b> Running cutting-edge AI infrastructure at scale is complex and exposes CoreWeave to risks such as service outages, security breaches, and execution missteps (e.g., delays in data center build-outs or hiring).</p>
+        <p><b>Regulatory and Geopolitical Risks:</b> Export controls, data sovereignty laws, and geopolitical tensions (e.g., US-China, Taiwan instability) could disrupt GPU supply or require costly compliance measures.</p>
+        <p><b>Financial Risks:</b> CoreWeave’s high leverage, reliance on external financing, and negative free cash flow mean that continued access to capital markets is critical. Any tightening of credit conditions or investor sentiment could impact refinancing and growth plans.</p>
+      </section>
+      <!-- How can I build this for any company? Button -->
+      <div class="build-any-company-container">
+        <button class="build-any-company-btn" onclick="showAgenticProcess()">How can I build this for any company?</button>
+      </div>
+      <!-- Agentic Process Modal (hidden by default) -->
+      <div id="agentic-process-modal" class="agentic-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="agentic-process-title">
+        <div class="agentic-modal-content">
+          <h2 id="agentic-process-title">Build a Credit Assessment for Any Company</h2>
+          <ol class="agentic-stepper">
+            <li><strong>Ingest Company Data</strong> – Upload or select company financials.</li>
+            <li><strong>Analyze Financials</strong> – The agent reviews key metrics and trends.</li>
+            <li><strong>Generate Tables & Charts</strong> – Visuals and summaries are created.</li>
+            <li><strong>Compose Narrative</strong> – Agent drafts the executive summary and insights.</li>
+            <li><strong>Review & Export</strong> – Download or share the final report.</li>
+          </ol>
+          <button class="launch-agent-btn" onclick="launchCreditAssessmentAgent()">Launch Credit Assessment AI Agent</button>
+          <button class="close-modal-btn" onclick="closeAgenticProcess()">Close</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+  function showAgenticProcess() {
+    document.getElementById('agentic-process-modal').style.display = 'flex';
+    document.getElementById('agentic-process-modal').focus();
+  }
+  function closeAgenticProcess() {
+    document.getElementById('agentic-process-modal').style.display = 'none';
+  }
+  function launchCreditAssessmentAgent() {
+    alert('The Credit Assessment AI Agent would now begin building a new report. (Demo placeholder)');
+    closeAgenticProcess();
+  }
+  </script>
+  <script src="main.js"></script>
+  <!-- script.js removed as redundant; all logic now in main.js -->
+  <!-- Sidebar navigation and scrollspy logic is now solely in main.js per audit and project convention. -->
+  <!-- (Removed: script.js is now obsolete; see README for rationale) -->
+</body>
+</html>

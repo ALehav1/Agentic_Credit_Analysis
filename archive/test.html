@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    button { padding: 10px 20px; background: blue; color: white; cursor: pointer; }
+    #page2 { display: none; }
+  </style>
+</head>
+<body>
+  <div id="page1">
+    <h1>Test Page 1</h1>
+    <p>This is a simple test to verify button functionality.</p>
+    <button onclick="showPage2()">Go to Page 2</button>
+  </div>
+  
+  <div id="page2">
+    <h1>Test Page 2</h1>
+    <p>If you see this, the button works!</p>
+    <button onclick="showPage1()">Go back</button>
+  </div>
+
+  <script>
+    function showPage2() {
+      document.getElementById('page1').style.display = 'none';
+      document.getElementById('page2').style.display = 'block';
+      console.log("Button clicked - page 2 shown");
+    }
+
+    function showPage1() {
+      document.getElementById('page2').style.display = 'none';
+      document.getElementById('page1').style.display = 'block';
+      console.log("Button clicked - page 1 shown");
+    }
+  </script>
+</body>
+</html>

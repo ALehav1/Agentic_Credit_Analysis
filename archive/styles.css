@@ -1,0 +1,532 @@
+/*
+ * styles.css
+ * CoreWeave Credit Analysis Demo
+ * Modern, professional palette: white, dark blue, light gray, accent
+ * Font: Inter, Roboto, Lato fallback
+ * All styles are custom and annotated for audit
+ */
+
+:root {
+  --color-bg: #f5f7fa;
+  --color-sidebar: #192a56;
+  --color-sidebar-active: #273c75;
+  --color-card: #fff;
+  --color-border: #e1e5ea;
+  --color-shadow: rgba(25, 42, 86, 0.08);
+  --color-accent: #ffb400;
+  --color-metric: #e0f7fa;
+  --color-risk: #ffe5e5;
+  --color-mitigant: #e6ffe5;
+  --color-text: #222;
+  --color-text-light: #666;
+  --sidebar-width: 260px;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', 'Roboto', 'Lato', Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  display: none; /* Hide the app until the start button is clicked */
+  flex-direction: row;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--color-sidebar);
+  color: #fff;
+  overflow-y: auto;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  z-index: 100;
+  display: block !important; /* Force display */
+  overscroll-behavior: contain;
+  padding: 2rem 1.2rem 1.2rem 1.2rem;
+  gap: 2rem;
+  border-right: 2px solid #e3e6ec;
+  /* === Make sidebar scrollable if content is taller than viewport === */
+  max-height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar-header {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+  color: #ffd700;
+  text-shadow: 0 1px 4px #0e1c2a22;
+}
+
+#sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#sidebar-nav li {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  font-size: 1.05rem;
+  padding: 0.8em 1.2em; /* Increased vertical padding */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+}
+
+#sidebar-nav li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#sidebar-nav li.active {
+  background: #e0eaff;
+  color: #174ea6;
+  font-weight: bold;
+}
+
+.sidebar-controls {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-start;
+}
+
+.sidebar-controls button {
+  background: #fff2cc;
+  color: #17314d;
+  border: none;
+  border-radius: 5px;
+  padding: 0.45em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+
+.sidebar-controls button:hover {
+  background: #ffe066;
+}
+
+#main-content {
+  display: block !important; /* Force display */
+  flex: 1;
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 900px;
+  margin-left: var(--sidebar-width);
+  margin-right: 2rem;
+}
+
+/* === CARD LAYOUT & INDENTATION === */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  /* Add spacing so content isn't flush with edge */
+}
+.card-body, .card > *:not(.card-header):not(.collapsible-header):not(.table-container) {
+  padding: 1.8rem 2.2rem; /* Increased padding */
+}
+.card-header, .collapsible-header {
+  padding: 1.25rem 2rem 1.25rem 2rem;
+  background: var(--color-section-header, #f8fafc);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+}
+/* Ensure links inside sidebar items are styled correctly */
+#sidebar-nav li a {
+  color: #fff; /* Default link color */
+  text-decoration: none; /* Remove underline */
+  display: block; /* Make link fill the li for easier clicking */
+  width: 100%;
+}
+
+#sidebar-nav li.active, #sidebar-nav li:hover {
+  background: var(--color-sidebar-active, #273c75); /* Use a lighter sidebar blue for hover/active */
+  color: #fff; /* Ensure text remains white */
+}
+/* Ensure link color changes on hover/active */
+#sidebar-nav li:hover a,
+#sidebar-nav li.active a {
+    color: #fff; /* Keep link text white on hover/active */
+}
+
+#sidebar-nav .icon {
+  font-size: 1.2em;
+  margin-right: 0.5em;
+}
+
+/* Collapsible Section Logic */
+.collapsible .card-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition), padding var(--transition);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.collapsible.open .card-body {
+  max-height: 500px;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+.collapsible-header .arrow {
+  display: inline-block;
+  transition: transform var(--transition);
+}
+.collapsible.open .collapsible-header .arrow {
+  transform: rotate(90deg);
+}
+
+/* Highlighting */
+.highlight {
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.metric {
+  background: var(--color-metric);
+  color: #007c91;
+}
+.risk {
+  background: var(--color-risk);
+  color: #b00020;
+}
+.mitigant {
+  background: var(--color-mitigant);
+  color: #218c2c;
+}
+.highlight:hover {
+  box-shadow: 0 2px 8px var(--color-shadow);
+  filter: brightness(1.05);
+}
+
+/* Tooltip */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  top: 110%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 0.3em 0.7em;
+  border-radius: 4px;
+  font-size: 0.92em;
+  white-space: nowrap;
+  z-index: 100;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* Floating Back to Top Button */
+#back-to-top {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  background: var(--color-accent);
+  color: #222;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 2rem;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  opacity: 0.85;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: background var(--transition), opacity var(--transition);
+}
+#back-to-top:hover {
+  background: #ffd580;
+  opacity: 1;
+}
+
+/* Page Title and Subtitle */
+.main-title {
+  font-size: 2.2em;
+  margin-bottom: 0.2em;
+  margin-top: 0.5em;
+  color: #19406e;
+  letter-spacing: -1px;
+}
+.subtitle {
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #555;
+}
+
+/* === AGENTIC APP UI STYLES === */
+.agentic-log {
+  background: #f8fafc;
+  border: 1.5px solid #e1e5ea;
+  border-radius: 8px;
+  font-size: 1.07em;
+  color: #19406e;
+  padding: 1.1em 1.5em;
+  margin: 1.5em auto 0 auto;
+  max-width: 600px;
+  min-height: 52px;
+  box-shadow: 0 1px 4px var(--color-shadow);
+  line-height: 1.55;
+  transition: background 0.25s;
+}
+.agentic-log p {
+  margin: 0.3em 0;
+  padding: 0;
+  font-family: 'Inter', 'Roboto', 'Lato', Arial, sans-serif;
+}
+.agentic-log .error-log {
+  color: #b00020;
+  font-weight: 600;
+  background: #ffe5e5;
+  border-radius: 4px;
+  padding: 0.2em 0.6em;
+  margin: 0.2em 0;
+  display: inline-block;
+}
+#company-input-section {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  justify-content: center;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px var(--color-shadow);
+  padding: 1.4em 1.5em;
+  margin: 2em auto 0 auto;
+  max-width: 540px;
+}
+#company-name-input {
+  font-size: 1.07em;
+  padding: 0.5em 1em;
+  border: 1.5px solid #e1e5ea;
+  border-radius: 5px;
+  outline: none;
+  min-width: 220px;
+  transition: border 0.2s;
+}
+#company-name-input:focus {
+  border: 1.5px solid #19406e;
+}
+#generate-assessment {
+  background: #ffd700;
+  color: #17314d;
+  border: none;
+  border-radius: 5px;
+  padding: 0.54em 1.3em;
+  font-size: 1.07em;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px var(--color-shadow);
+  transition: background 0.18s;
+}
+#generate-assessment:hover {
+  background: #ffe066;
+}
+.report-area {
+  margin: 2.5em auto 0 auto;
+  max-width: 720px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 2.2em 2.5em 2.2em 2.5em;
+  min-height: 80px;
+}
+.report-container h2 {
+  font-size: 1.5em;
+  color: #19406e;
+  margin-top: 0;
+  margin-bottom: 0.7em;
+}
+.report-container ul {
+  margin: 1.1em 0 1.1em 1.3em;
+  padding: 0;
+  list-style: disc inside;
+}
+.report-container li {
+  margin-bottom: 0.5em;
+}
+.report-container p em {
+  color: #555;
+  font-style: italic;
+}
+/* === END AGENTIC APP UI STYLES === */
+
+/* === TITLE SLIDE STYLES === */
+.title-slide {
+  display: flex !important; /* Force display with !important */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #192a56;
+  color: #fff;
+  text-align: center;
+  padding: 2rem;
+  gap: 1.2rem;
+  z-index: 9999; /* Ensure it's on top of everything */
+}
+
+.title-slide h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.title-slide p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.title-slide button {
+  background: var(--color-accent);
+  color: var(--color-sidebar);
+  font-weight: bold;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.title-slide button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+/* === END TITLE SLIDE STYLES === */
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto; /* Allows horizontal scrolling on small screens */
+  margin-top: 1rem; /* Add some space above the table */
+  margin-bottom: 1.5rem; /* Add space below the table container */
+}
+
+.financial-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem; /* Space below the table itself */
+  font-size: 0.9em; /* Slightly smaller font for tables */
+}
+
+.financial-table caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+  font-size: 1.1em;
+  color: var(--text-color);
+}
+
+.financial-table th,
+.financial-table td {
+  padding: 0.75rem 0.5rem; /* Add padding inside cells (vertical, horizontal) */
+  text-align: right; /* Align numbers to the right */
+  border-bottom: 1px solid var(--border-color); /* Subtle row separator */
+  white-space: nowrap; /* Prevent numbers from wrapping */
+}
+
+.financial-table th {
+  background-color: var(--sidebar-bg); /* Light background for headers */
+  color: var(--text-color);
+  font-weight: 600;
+  text-align: left; /* Align headers to the left */
+}
+
+/* Zebra striping for rows */
+.financial-table tbody tr:nth-child(even) {
+  background-color: var(--table-row-alt-bg);
+}
+
+.financial-table th:first-child,
+.financial-table td:first-child {
+  text-align: left; /* Align the first column (Year) to the left */
+}
+
+.th-icon {
+  margin-right: 0.3em;
+}
+
+/* Ensure table stays within card padding */
+.card-body .table-container {
+    margin-left: -1.5rem; /* Counteract card-body padding */
+    margin-right: -1.5rem; /* Counteract card-body padding */
+    padding-left: 1.5rem; /* Add padding back for scrolling */
+    padding-right: 1.5rem; /* Add padding back for scrolling */
+}
+
+.card-body .table-container .financial-table {
+    margin-bottom: 0; /* Remove margin if inside card-body container */
+}
+
+/* Chart Styles */
+
+@media (max-width: 700px) {
+  #app {
+    flex-direction: column !important;
+  }
+  #sidebar {
+    position: static;
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    min-height: unset;
+    flex-direction: row !important;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 1px solid var(--color-border);
+    border-right: none;
+    align-self: unset;
+    padding: 1rem 0.5rem;
+    gap: 1rem;
+  }
+  #sidebar-nav {
+    flex-direction: row;
+    gap: 0.2rem;
+  }
+  #sidebar-nav li {
+    font-size: 0.98rem;
+    padding: 0.5em 0.7em;
+  }
+  .sidebar-controls {
+    margin-top: 0;
+    gap: 0.4rem;
+  }
+  #main-content {
+    padding: 1rem;
+  }
+}
+
+/* === END SIDEBAR LAYOUT FIX === */

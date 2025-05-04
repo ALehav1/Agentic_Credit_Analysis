@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic Credit Analysis App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <h1>Agentic Credit Analysis App</h1>
+    <!-- Step 1: Trigger agentic build -->
+    <button id="start-agentic-build">Start Agentic Build</button>
+
+    <!-- Step 2: Company input section (hidden until build completes) -->
+    <section id="company-input-section" style="display:none; margin-top:1rem;">
+      <input type="text" id="company-name-input" placeholder="Enter company name" />
+      <button id="generate-assessment">Generate Assessment</button>
+    </section>
+
+    <!-- Logs and results -->
+    <div id="agentic-log" class="agentic-log" style="margin-top:1rem;"></div>
+    <div id="report-area" class="report-area" style="margin-top:1rem;"></div>
+  </div>
+
+  <!-- Include agentic workflow script -->
+  <script src="agentic.js"></script>
+</body>
+</html>

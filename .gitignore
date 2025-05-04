@@ -1,0 +1,27 @@
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Backup directories (keep the files, but don't track changes)
+/backups/**
+
+# Cache
+.cache/
