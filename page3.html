@@ -1,352 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agentic Credit Analysis App</title>
-  <style>
-    /* Clean, simple styling with no dependencies */
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.5;
-      color: #333;
-      background: #f7f9fc;
-    }
-    
-    #app {
-      display: flex;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-      color: #192a56;
-    }
-    
-    .subtitle {
-      color: #666;
-      font-size: 18px;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .button {
-      background: #0056b3;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: 500;
-      display: inline-block;
-    }
-    
-    .button:hover {
-      background: #003d7a;
-    }
-    
-    .log {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 4px;
-      border: 1px solid #e9ecef;
-      margin: 20px 0;
-      height: 150px;
-      overflow-y: auto;
-      font-family: monospace;
-    }
-    
-    .error-log {
-      color: #dc3545;
-    }
-    
-    input {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      width: 300px;
-      margin-right: 10px;
-      font-size: 16px;
-    }
-    
-    .nav-links {
-      text-align: center;
-      margin-top: 40px;
-    }
-    
-    a {
-      color: #0056b3;
-      text-decoration: none;
-    }
-    
-    a:hover {
-      text-decoration: underline;
-    }
-    
-    /* Sidebar navigation styling */
-    #app-sidebar {
-      width: 250px;
-      background-color: #192a56;
-      color: white;
-      padding: 20px;
-    }
-    
-    #app-sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 30px 0;
-    }
-    
-    #app-sidebar li {
-      margin-bottom: 15px;
-    }
-    
-    #app-sidebar a {
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      display: block;
-      padding: 8px 10px;
-      border-radius: 4px;
-    }
-    
-    #app-sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    #app-sidebar a.active {
-      background-color: rgba(255, 255, 255, 0.2);
-      font-weight: bold;
-    }
-    
-    #app-content {
-      flex: 1;
-      padding: 0;
-      overflow: auto;
-    }
-    
-    /* Styles for the report display after generation */
-    .result-app {
-      display: flex;
-      width: 100%;
-      margin-top: 10px;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      background: white;
-    }
-    
-    #sidebar {
-      width: 250px;
-      background-color: #192a56;
-      color: white;
-      padding: 20px;
-      min-height: 500px;
-    }
-    
-    #sidebar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 30px 0;
-    }
-    
-    #sidebar li {
-      margin-bottom: 15px;
-    }
-    
-    #sidebar a {
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      display: block;
-      padding: 8px 10px;
-      border-radius: 4px;
-    }
-    
-    #sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    #sidebar a.active {
-      background-color: rgba(255, 255, 255, 0.2);
-      font-weight: bold;
-    }
-    
-    #content {
-      flex: 1;
-      padding: 30px;
-      overflow: auto;
-    }
-    
-    .main-title {
-      font-size: 28px;
-      color: #192a56;
-      margin-bottom: 30px;
-    }
-    
-    section.collapsible {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 20px;
-      display: none;
-    }
-    
-    section.collapsible.open {
-      display: block;
-    }
-    
-    section.collapsible h2 {
-      color: #192a56;
-      cursor: pointer;
-      padding: 10px 0;
-      position: relative;
-    }
-    
-    section.collapsible h2:before {
-      content: "+";
-      position: absolute;
-      right: 15px;
-      font-size: 20px;
-      color: #0056b3;
-    }
-    
-    section.collapsible.open h2:before {
-      content: "-";
-    }
-    
-    .financial-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    
-    .financial-table caption {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .financial-table th, .financial-table td {
-      border: 1px solid #ddd;
-      padding: 8px 12px;
-      text-align: left;
-    }
-    
-    .financial-table th {
-      background-color: #f5f7fa;
-    }
-    
-    .chart-container {
-      height: 300px;
-      margin: 20px 0 30px;
-    }
-    
-    .chart-label {
-      display: block;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    
-    /* Debug styles to help with development */
-    .debug-info {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      z-index: 9999;
-      display: none;
-    }
-    
-    body.debug .debug-info {
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Credit Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 </head>
 <body>
-  <div id="app">
-    <!-- App Sidebar with workflow steps -->
-    <div id="app-sidebar">
-      <ul>
-        <li><a href="#step1" class="active">Step 1: Build Agentic Solution</a></li>
-        <li><a href="#step2">Step 2: Generate Credit Assessment</a></li>
-      </ul>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Agentic Credit Analysis</h2>
+            </div>
+            <div class="sidebar-content">
+                <ul class="workflow-steps">
+                    <li id="nav-step0" class="active">
+                        <span class="step-number">1</span> Define Requirements
+                    </li>
+                    <li id="nav-step1">
+                        <span class="step-number">2</span> Build Solution
+                    </li>
+                    <li id="nav-step2">
+                        <span class="step-number">3</span> Generate Assessment
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <main class="content">
+            <header class="app-header">
+                <h1 class="app-title">Agentic Credit Analysis</h1>
+                <h2 class="app-subtitle">AI-Powered Financial Assessment</h2>
+            </header>
+            
+            <!-- Step 0: Define Requirements -->
+            <section id="step0" class="app-section active">
+                <h2 class="section-title">Define Your Requirements</h2>
+                <div class="section-content">
+                    <p class="section-description">What would you like your agentic solution to do?</p>
+                    <textarea id="user-requirements" class="full-width-textarea" rows="10" placeholder="Describe what you'd like the agentic credit analysis solution to include..."></textarea>
+                    <div class="button-row">
+                        <button id="see-example" class="btn primary" onclick="showExampleRequirements()">See Example Requirements</button>
+                        <button id="proceed-to-instructions" class="btn secondary" onclick="proceedToInstructions()">Continue</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Step 1: Build Solution (previously Step 2) -->
+            <section id="step2" class="app-section">
+                <h2 class="section-title">Build Agentic Solution</h2>
+                <div class="section-content">
+                    <p class="section-description">I'll now build the agentic credit analysis solution based on your requirements.</p>
+                    <div class="button-row">
+                        <button id="start-agentic-build" class="btn primary" onclick="startAgenticBuild()">Start Agentic Build</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Step 2: Generate Assessment (previously Step 3) -->
+            <section id="step3" class="app-section">
+                <h2 class="section-title">Generate Credit Assessment</h2>
+                <div class="section-content">
+                    <p class="section-description">Enter the company name to generate a comprehensive credit assessment report.</p>
+                    <input type="text" id="company-name" class="company-input" placeholder="Enter company name (e.g., Covidien, Pfizer)">
+                    <div class="button-row">
+                        <button id="generate-assessment" class="btn primary" onclick="generateAssessment()">Generate Assessment</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Step 3: Analysis Results -->
+            <section id="step4" class="app-section">
+                <h2 class="section-title">Credit Assessment Report</h2>
+                <div id="result-container">
+                    <!-- Report will be inserted here -->
+                </div>
+            </section>
+        </main>
     </div>
     
-    <!-- App Content -->
-    <div id="app-content">
-      <div class="container">
-        <header>
-          <h1>Agentic Credit Analysis App</h1>
-          <p class="subtitle">Generate a professional credit assessment for any company</p>
-        </header>
-        
-        <!-- Step 1: Agentic Build -->
-        <section id="step1" class="collapsible open">
-          <h2>Step 1: Build Agentic Solution</h2>
-          <div class="card">
-            <p>Click the button below to build the agentic credit analysis solution:</p>
-            <button id="start-agentic-build" class="button">Start Agentic Build</button>
-          </div>
-        </section>
-        
-        <!-- Step 2: Company Input -->
-        <section id="step2" class="collapsible">
-          <h2>Step 2: Generate Credit Assessment</h2>
-          <div id="company-input-section" class="card" style="display:none;">
-            <p>Enter a company name to generate a credit assessment:</p>
-            <div>
-              <input type="text" id="company-name-input" placeholder="Company name (e.g., Tesla)" value="CoreWeave">
-              <button id="generate-assessment" class="button">Generate Assessment</button>
-            </div>
-          </div>
-        </section>
-        
-        <!-- Logs Area -->
-        <div id="agentic-log" class="log"></div>
-        
-        <!-- Report Area -->
-        <div id="report-area"></div>
-        
-        <div class="nav-links">
-          <a href="index.html">← Back to Home</a> | 
-          <a href="page2.html">← Back to Example</a>
-        </div>
-      </div>
+    <!-- Log Area (hidden but needed for JavaScript) -->
+    <div id="agentic-log" style="display: none;"></div>
+    
+    <!-- Debug Panel (only shown in debug mode) -->
+    <div class="debug-panel" id="debug-panel">
+        <div>Debug Status: <span id="debug-status">Initializing</span></div>
+        <div>Sections: <span id="debug-sections">0</span></div>
+        <div>Active Step: <span id="debug-active-step">None</span></div>
     </div>
-  </div>
-  
-  <!-- Debug info panel (shown when in debug mode) -->
-  <div class="debug-info">
-    <div id="debug-status">Status: Ready</div>
-    <div id="debug-sections">Sections: 0</div>
-    <div id="debug-links">Links: 0</div>
-  </div>
-  
-  <!-- Agentic workflow script -->
-  <script src="agentic.js"></script>
+    
+    <script src="agentic.js"></script>
 </body>
 </html>
