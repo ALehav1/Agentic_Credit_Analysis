@@ -1,16 +1,892 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agentic Credit Analysis</title>
-  <script>
-    // Redirect to the CoreWeave example with proper formatting
-    window.location.href = "samples/coreweave/index.html";
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreWeave Credit Assessment – May 2025</title>
+    <link rel="stylesheet" href="samples/coreweave/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        /* Custom styles for rating display */
+        .credit-rating {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .rating-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #e64a19;
+            margin: 10px 0;
+        }
+        
+        .rating-description {
+            font-size: 16px;
+            color: #455a64;
+            margin-bottom: 5px;
+        }
+        
+        .rating-note {
+            font-size: 14px;
+            color: #78909c;
+            margin-top: 5px;
+        }
+        
+        .main-title {
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #455a64;
+            font-weight: normal;
+        }
+        
+        /* Call to action button at bottom */
+        .action-container {
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .app-button {
+            display: inline-block;
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .app-button:hover {
+            background-color: #1669db;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* Table styling */
+        .scenario-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .scenario-table th, .scenario-table td {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        
+        .scenario-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        /* Fix chart sizes */
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        #customerMixChart {
+            max-height: 300px;
+        }
+        
+        /* Fix sidebar styling */
+        #sidebar {
+            background: #1e2a38;
+            color: #fff;
+            width: 240px;
+            min-width: 200px;
+            padding: 24px 0 0 0;
+            box-shadow: 2px 0 8px rgba(30,42,56,0.06);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1000;
+        }
+        
+        #sidebar h3 {
+            padding: 0 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+        
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+        
+        #sidebar nav ul li {
+            margin-bottom: 16px;
+        }
+        
+        #sidebar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: block;
+            padding: 6px 0;
+        }
+        
+        #sidebar nav ul li a:hover, 
+        #sidebar nav ul li a.active {
+            color: #60a5fa;
+        }
+        
+        /* Rating scorecard styles */
+        .rating-scorecard {
+            background-color: #f5f7fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 30px 0;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .scorecard-header {
+            margin-bottom: 20px;
+        }
+        
+        .scorecard-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        
+        .scorecard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .scorecard-table th, 
+        .scorecard-table td {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        
+        .scorecard-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .scorecard-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .weight-col {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .score-col {
+            width: 120px;
+        }
+        
+        .factor-header {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        
+        .final-score {
+            background-color: #eff6ff;
+            font-weight: 700;
+        }
+        
+        .final-score td {
+            color: #1e40af;
+        }
+        
+        .rating-methodology {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 12px;
+            font-style: italic;
+        }
+        
+        /* Enhanced rating scorecard styles */
+        .rating-scorecard {
+            background-color: #f0f4fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 30px 0;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rating-scorecard::before {
+            content: "Ba1";
+            position: absolute;
+            right: -15px;
+            top: -15px;
+            font-size: 120px;
+            font-weight: 800;
+            color: rgba(79, 70, 229, 0.06);
+            z-index: 0;
+            line-height: 1;
+        }
+        
+        .scorecard-header {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .scorecard-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        
+        .scorecard-description {
+            color: #475569;
+            margin-bottom: 16px;
+            font-size: 15px;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+        
+        .calculation-method {
+            background-color: #eff6ff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .calculation-method strong {
+            color: #1e40af;
+        }
+        
+        /* Fix layout spacing */
+        #content {
+            margin-left: 240px;
+            padding: 30px 40px;
+            max-width: 1200px;
+        }
+        
+        /* Responsive fixes */
+        @media (max-width: 1200px) {
+            #content {
+                padding: 30px 20px;
+            }
+        }
+        
+        /* Rating banner styling */
+        .rating-banner {
+            display: flex;
+            align-items: center;
+            background-color: #f8fafc;
+            padding: 24px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4f46e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .rating-badge {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            background-color: #4f46e5;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-right: 24px;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+        
+        .rating-details {
+            flex-grow: 1;
+        }
+        
+        .rating-details h3 {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            color: #1e293b;
+        }
+        
+        .rating-details p {
+            margin: 0 0 4px 0;
+            color: #64748b;
+        }
+        
+        .rating-date {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+    </style>
 </head>
 <body>
-  <!-- This page simply redirects to samples/coreweave/index.html -->
-  <p>Redirecting to CoreWeave example...</p>
+    <div id="app">
+        <aside id="sidebar">
+            <h3>Report Navigation</h3>
+            <nav>
+                <ul>
+                    <li><a href="#executive-summary">Executive Summary</a></li>
+                    <li><a href="#business-profile">Business & Competitive Profile</a></li>
+                    <li><a href="#financial-analysis">Financial Analysis</a></li>
+                    <li><a href="#debt-structure">Debt Structure</a></li>
+                    <li><a href="#industry-analysis">Industry & Macro</a></li>
+                    <li><a href="#risks">Risks & Scenarios</a></li>
+                    <li><a href="#conclusion">Conclusion</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main id="content">
+            <!-- Prominent Rating Banner at the very top -->
+            <div class="rating-banner">
+                <div class="rating-badge">Ba1</div>
+                <div class="rating-details">
+                    <h3>Implied Moody's Rating</h3>
+                    <p>CoreWeave, Inc.</p>
+                    <p class="rating-date">Analysis Date: May 2025</p>
+                </div>
+            </div>
+            
+            <header>
+                <h1 id="page-title" class="main-title">CoreWeave Credit Assessment – May 2025</h1>
+                <p class="subtitle">Comprehensive credit assessment for debt financing considerations</p>
+            </header>
+            
+            <!-- Executive Summary Section -->
+            <section id="executive-summary" class="collapsible open">
+                <h2>Executive Summary and Credit Conclusion</h2>
+                <p>CoreWeave exhibits a highly speculative credit profile – best characterized as non-investment grade (high-yield). In our shadow rating, we would place CoreWeave around the Ba1 (Moody's Ba1) range, reflecting robust growth prospects offset by heavy leverage and concentration risks. Key credit drivers include:</p>
+                <ul>
+                    <li><b>Explosive Growth & Scale:</b> Revenue surged from just $229 million in 2023 to $1.92 billion in 2024 – an eightfold increase year-on-year – positioning CoreWeave as a major player in AI cloud infrastructure. This growth is underpinned by multi-year contracts (backlog of ~$15.1 billion in remaining performance obligations) that provide some revenue visibility.</li>
+                    <li><b>Leverage & Capital Intensity:</b> The company carries approximately $8 billion of debt (as of end-2024), used to finance its GPU fleet and data center expansion. Adjusted EBITDA margins are high (>60% in 2024), implying roughly $1.2 billion in EBITDA, but net debt/EBITDA remains ~5–6×, well into speculative-grade territory. Annual interest expense was $361 million in 2024, resulting in EBITDA-to-interest coverage of only ~3×, and free cash flow (FCF) is deeply negative (–$5.9 billion in 2024) due to massive capital expenditures.</li>
+                    <li><b>Customer Concentration:</b> CoreWeave's revenue is dangerously concentrated – 77% of 2024 revenue came from its top two customers (including Microsoft). Microsoft alone accounted for ~62% of revenue, exposing the firm to significant volume and renewal risk if this key relationship or its AI strategy shifts. The recently inked $11.9 billion, 5-year contract with OpenAI should help diversify the base going forward, but concentration will remain a central credit concern in the near term.</li>
+                    <li><b>Operational Momentum vs. Execution Risk:</b> CoreWeave has first-mover advantage in specialized AI cloud infrastructure, with strong backing from Nvidia (a stakeholder and key supplier) and marquee clients, evidenced by a new $11.9 billion contract with OpenAI. However, execution risks are high given the capital-intensive, rapidly evolving technology and formidable competitors (Big Tech hyperscalers). The company's ability to continue scaling efficiently and manage costs will determine if it can turn its booming revenue into sustainable cash flow.</li>
+                    <li><b>Liquidity & Financial Flexibility:</b> CoreWeave's liquidity is bolstered by large upfront customer payments – operating cash flow was $2.75 billion in 2024 thanks to prepaid commitments – and a recent $7.5 billion debt facility provides growth capital. Cash on hand was $1.4 billion (plus ~$704 million restricted) at year-end 2024, and the company raised $1.5 billion in its March 2025 IPO. These funds partially mitigate near-term liquidity concerns and allowed ~$1 billion debt repayment post-IPO. That said, CoreWeave remains dependent on external financing; continued market access is critical to fund expansion and refinance maturing obligations.</li>
+                </ul>
+                <p><b>Credit Conclusion:</b> Overall, CoreWeave's credit profile is speculative with a negative outlook. The headline metrics – net debt/EBITDA ~5.5×, EBITDA margin ~60%, interest coverage ~3×, and large negative FCF – align with a high-yield rating (single- to double-B). The red flags of customer concentration and high debt load are partially offset by mitigants like contracted revenue backlog and asset collateralization (e.g. NVIDIA H100 GPUs used to secure loans). Given these factors, we recommend extreme caution to lenders: any exposure should be secured and covenant-heavy, or otherwise kept minimal. Our recommendation is to lend only on a secured basis (e.g. GPU-backed financings) and avoid unsecured lending absent significant improvement in diversification and cash flows. We would seek covenants around leverage, minimum liquidity, and limitations on additional debt. Credit outlook is fragile; we would revisit our stance if CoreWeave successfully diversifies its customer base and generates consistent free cash flow (positive triggers), or conversely, if it faces contract cancellations or funding shortfalls (negative triggers).</p>
+                
+                <!-- Financial Summary Table -->
+                <div class="table-container">
+                    <table class="financial-table">
+                        <caption>Financial Summary (2022–2024)</caption>
+                        <thead>
+                            <tr>
+                                <th><span class="th-icon" aria-label="Year">📅</span>Year</th>
+                                <th><span class="th-icon" aria-label="Revenue">💰</span>Revenue ($M)</th>
+                                <th><span class="th-icon" aria-label="EBITDA">📈</span>EBITDA ($M)</th>
+                                <th><span class="th-icon" aria-label="Net Income">🧾</span>Net Income ($M)</th>
+                                <th><span class="th-icon" aria-label="Debt">🏦</span>Debt ($M)</th>
+                                <th><span class="th-icon" aria-label="Free Cash Flow">💧</span>FCF ($M)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2022</td><td>15.8</td><td>-10</td><td>-31</td><td>0</td><td>-50</td></tr>
+                            <tr><td>2023</td><td>228.9</td><td>60</td><td>-594</td><td>3,000</td><td>-1,500</td></tr>
+                            <tr><td>2024</td><td>1,920</td><td>1,152</td><td>-863</td><td>8,000</td><td>-5,900</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <span class="chart-label">Revenue Growth (2022–2024)</span>
+                <!-- Revenue Growth Chart -->
+                <div class="chart-container">
+                    <canvas id="revenueChart" width="400" height="200" aria-label="Revenue Growth Chart" role="img"></canvas>
+                </div>
+                
+                <!-- Moody's Rating Scorecard -->
+                <div class="rating-scorecard" id="moodys-scorecard">
+                    <div class="scorecard-header">
+                        <h3 class="scorecard-title">Moody's Rating Methodology Scorecard</h3>
+                        <p class="scorecard-description">This scorecard follows Moody's methodology for Business and Consumer Service Companies, applying quantitative and qualitative assessment factors to determine CoreWeave's implied rating.</p>
+                    </div>
+                    
+                    <div class="calculation-method">
+                        <strong>Rating Calculation Method:</strong> Each factor is assigned a sub-rating which is converted to a numeric score. These scores are then weighted according to Moody's methodology to calculate the final rating. The weighted average score of <strong>4.2</strong> translates to an implied rating of <strong>Ba1</strong>.
+                    </div>
+                    
+                    <table class="scorecard-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th class="weight-col">Weight</th>
+                                <th class="score-col">Sub-Rating</th>
+                                <th class="score-col">Numeric Score</th>
+                                <th class="score-col">Weighted Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scale (Revenue $B)</td>
+                                <td class="weight-col">20%</td>
+                                <td class="score-col">Ba3</td>
+                                <td class="score-col">5.0</td>
+                                <td class="score-col">1.0</td>
+                            </tr>
+                            <tr>
+                                <td>Business Profile</td>
+                                <td class="weight-col">30%</td>
+                                <td class="score-col">Ba2</td>
+                                <td class="score-col">4.0</td>
+                                <td class="score-col">1.2</td>
+                            </tr>
+                            <tr>
+                                <td>Profitability</td>
+                                <td class="weight-col">15%</td>
+                                <td class="score-col">Baa3</td>
+                                <td class="score-col">3.0</td>
+                                <td class="score-col">0.45</td>
+                            </tr>
+                            <tr>
+                                <td>Leverage & Coverage</td>
+                                <td class="weight-col">20%</td>
+                                <td class="score-col">B1</td>
+                                <td class="score-col">6.0</td>
+                                <td class="score-col">1.2</td>
+                            </tr>
+                            <tr>
+                                <td>Financial Policy</td>
+                                <td class="weight-col">15%</td>
+                                <td class="score-col">Ba2</td>
+                                <td class="score-col">4.0</td>
+                                <td class="score-col">0.6</td>
+                            </tr>
+                            <tr class="final-score">
+                                <td><b>Final Weighted Score</b></td>
+                                <td class="weight-col">100%</td>
+                                <td class="score-col" colspan="2"><b>Ba1</b></td>
+                                <td class="score-col"><b>4.2</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="rating-methodology">Note: Moody's methodology uses a 1-9 scale where Aaa=1, Aa1=2... Caa3=9. Lower scores represent stronger creditworthiness.</p>
+                </div>
+            </section>
+            
+            <!-- Business Profile Section -->
+            <section id="business-profile" class="collapsible">
+                <h2>Business and Competitive Profile</h2>
+                <p>CoreWeave is a specialized cloud infrastructure provider focused on delivering GPU-based computing power for artificial intelligence (AI) and high-performance workloads. The company leases and operates clusters of NVIDIA GPUs in data centers, offering them "as-a-service" to enterprises that need large-scale AI model training, inference, and graphics rendering capacity.</p>
+                
+                <h3>Revenue Composition</h3>
+                <p>CoreWeave's revenue comes almost entirely from cloud services (GPU compute rentals). As of the 2024 IPO filing, over 60% of revenue was tied to Microsoft (likely for AI workloads on Azure/OpenAI). The second-largest client (undisclosed "Customer C") brought total top-two concentration to 77%.</p>
+                
+                <span class="chart-label">Customer Revenue Mix (2024)</span>
+                <div class="chart-container">
+                    <canvas id="customerMixChart" width="400" height="200" aria-label="Customer Mix Chart" role="img"></canvas>
+                </div>
+                
+                <h3>Market Position</h3>
+                <p>CoreWeave has quickly risen from a 2017 startup (originally a crypto-mining operation) to a leading independent AI cloud provider. It leverages a close partnership with Nvidia (which took a stake and supplies hardware) to obtain cutting-edge GPUs ahead of many competitors.</p>
+            </section>
+            
+            <!-- Financial Analysis Section -->
+            <section id="financial-analysis" class="collapsible">
+                <h2>Financial Analysis</h2>
+                <p>CoreWeave's financial profile has transformed dramatically in the past three years. Revenue skyrocketed from $15.8 million in 2022 to $228.9 million in 2023, and then to $1.92 billion in 2024. This exponential growth (737% in 2024) reflects surging demand for AI compute capacity.</p>
+                
+                <h3>Profitability and Growth</h3>
+                <p>CoreWeave posted net losses of $31 million (2022), $594 million (2023), and $863 million (2024), as enormous investments in infrastructure and interest costs outweighed gross profits. At the operating level, the company turned a corner in 2024 – achieving a GAAP operating profit of $324 million (after operating losses in prior years) – thanks to an ~74% gross margin and improved scale.</p>
+                
+                <h3>Cash Flow Analysis</h3>
+                <p>Operating cash flow (OCF) turned sharply positive in 2023 and 2024 (>$1.8 billion and $2.7 billion, respectively), after effectively zero in 2022. However, this OCF is not from operating profitability per se, but rather from working capital factors – specifically, huge increases in deferred revenue (customer prepayments for future services).</p>
+                
+                <span class="chart-label">Operating Cash Flow vs Capital Expenditures (2022-2024)</span>
+                <div class="chart-container">
+                    <canvas id="cashFlowChart" width="400" height="200" aria-label="Cash Flow Chart" role="img"></canvas>
+                </div>
+            </section>
+            
+            <!-- Debt Structure Section -->
+            <section id="debt-structure" class="collapsible">
+                <h2>Debt Structure and Maturity Profile</h2>
+                <p>CoreWeave has layered on several rounds of debt financing, primarily in the form of secured term loan facilities and credit lines. Below we outline the major components of the company's debt structure and their terms:</p>
+                
+                <ul>
+                    <li><b>GPU-Backed Term Loan Facilities (Term Loan "DDTL" 1.0 and 2.0):</b> In August 2023, CoreWeave raised a $2.3 billion debt facility led by Magnetar and Blackstone, notable for being collateralized by the company's NVIDIA H100 GPUs.</li>
+                    <li><b>Revolving Credit Facility:</b> In October 2024, CoreWeave added a $650 million revolving credit line to bolster liquidity. This facility is provided by a syndicate of top banks (JPMorgan, Goldman Sachs, Morgan Stanley, and others).</li>
+                    <li><b>Convertible Notes / Bridge Loans:</b> Prior to the large 2023/2024 facilities, CoreWeave had issued convertible senior secured notes in 2021 (initially $45M, increased to $50M) that were due to mature in October 2025.</li>
+                </ul>
+                
+                <span class="chart-label">Debt Maturity Schedule ($M)</span>
+                <div class="chart-container">
+                    <canvas id="debtMaturityChart" width="400" height="200" aria-label="Debt Maturity Chart" role="img"></canvas>
+                </div>
+            </section>
+            
+            <!-- Industry Section -->
+            <section id="industry-analysis" class="collapsible">
+                <h2>Industry and Macroeconomic Environment</h2>
+                <p>CoreWeave operates at the intersection of the cloud services industry and the AI/semiconductor industry. Both are fast-evolving sectors with unique dynamics:</p>
+                
+                <h3>Sector Dynamics – AI Cloud Infrastructure</h3>
+                <p>Demand for AI computing infrastructure has been extremely robust and relatively price-insensitive in the last 1–2 years. Tech companies large and small are racing to train AI models, which requires massive parallel processing power (GPUs). This has led to a seller's market for high-end cloud GPU capacity – evidenced by CoreWeave's explosive growth and the willingness of customers to pre-pay and lock in multi-year contracts.</p>
+                
+                <h3>Competitive Landscape</h3>
+                <p>CoreWeave competes with several types of providers in the AI cloud space:</p>
+                <ul>
+                    <li><b>Hyperscalers:</b> Microsoft Azure, AWS, and Google Cloud are aggressively expanding their GPU offerings, but face supply constraints and have broader service portfolios to manage.</li>
+                    <li><b>Specialized GPU Cloud Providers:</b> Companies like Lambda Labs and RunPod offer similar services but at smaller scale.</li>
+                    <li><b>Enterprise Self-Built:</b> Large tech companies may choose to build their own GPU infrastructure, though this requires significant capital and expertise.</li>
+                </ul>
+                
+                <h3>Market Growth Forecast</h3>
+                <p>The AI infrastructure market is projected to grow at a CAGR of over 25% through 2030, driven by increasing demand for foundation model training and inference. However, several factors could impact this trajectory:</p>
+                
+                <div class="chart-container">
+                    <canvas id="marketGrowthChart" width="400" height="220" aria-label="Market Growth Chart" role="img"></canvas>
+                </div>
+            </section>
+            
+            <!-- Risks Section -->
+            <section id="risks" class="collapsible">
+                <h2>Risks and Credit Scenarios</h2>
+                <p>CoreWeave's credit profile is characterized by several key risks that could impact its ability to service debt:</p>
+                
+                <h3>Key Risks</h3>
+                <ul>
+                    <li><b>Customer Concentration:</b> Microsoft accounts for over 60% of revenue, creating significant dependency. If Microsoft scales back AI investments or builds more internal capacity, CoreWeave would be severely impacted.</li>
+                    <li><b>Technology Obsolescence:</b> Current GPUs could be rendered less valuable by newer chip technologies. Nvidia's release cycle typically renders previous generation hardware less valuable for cutting-edge AI workloads.</li>
+                    <li><b>Competitive Pressure:</b> Major cloud providers are rapidly scaling their own GPU offerings. If Azure, AWS, and Google Cloud resolve their capacity constraints, CoreWeave's competitive advantage could erode.</li>
+                    <li><b>Execution Risk:</b> Rapid expansion could lead to operational inefficiencies. Managing growth across multiple data centers globally requires sophisticated operations.</li>
+                    <li><b>Refinancing Risk:</b> Large debt maturities in 2028-2029 will require market access. If credit markets tighten by then, refinancing could be challenging or costly.</li>
+                </ul>
+                
+                <h3>Risk Assessment</h3>
+                <div class="chart-container">
+                    <canvas id="riskRadarChart" width="400" height="300" aria-label="Risk Radar Chart" role="img"></canvas>
+                </div>
+                
+                <h3>Credit Scenarios</h3>
+                <table class="scenario-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Key Assumptions</th>
+                            <th>Credit Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base Case</td>
+                            <td>
+                                - Revenue grows at 80-100% in 2025, moderating to 40-50% in 2026<br>
+                                - EBITDA margins remain ~60%<br>
+                                - Capex moderates to $5-6B in 2025<br>
+                                - Customer concentration improves modestly
+                            </td>
+                            <td>Rating remains Ba1, with potential for Ba1+ by late 2026 if customer diversification improves significantly</td>
+                        </tr>
+                        <tr>
+                            <td>Upside Case</td>
+                            <td>
+                                - OpenAI contract ramps faster than expected<br>
+                                - Additional large customers signed, reducing Microsoft to <40% of revenue<br>
+                                - EBITDA margins expand to 65%<br>
+                                - IPO success enables equity-funded growth vs. additional debt
+                            </td>
+                            <td>Potential upgrade to Baa3 by 2026 as leverage decreases below 4.0x</td>
+                        </tr>
+                        <tr>
+                            <td>Downside Case</td>
+                            <td>
+                                - AI investment cycle cools in 2026<br>
+                                - Microsoft reduces contract commitment<br>
+                                - GPU prices fall as supply increases<br>
+                                - EBITDA margins compress to 50%<br>
+                                - Refinancing becomes challenging in tight credit markets
+                            </td>
+                            <td>Downgrade to B1 or lower as leverage increases above 7.0x and interest coverage falls below 2.0x</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- Conclusion Section -->
+            <section id="conclusion" class="collapsible">
+                <h2>Conclusion</h2>
+                <p>CoreWeave presents a high-risk, high-reward credit opportunity in the rapidly evolving AI infrastructure space. The company's Ba1 implied rating reflects its strong growth trajectory and strategic position in a booming market, balanced against significant leverage and customer concentration risks.</p>
+                
+                <p><b>Key Strengths:</b></p>
+                <ul>
+                    <li>First-mover advantage in specialized AI cloud infrastructure</li>
+                    <li>Strong relationships with Nvidia and marquee customers</li>
+                    <li>Exceptional revenue growth and high EBITDA margins</li>
+                    <li>Significant contracted revenue backlog providing visibility</li>
+                </ul>
+                
+                <p><b>Key Challenges:</b></p>
+                <ul>
+                    <li>High customer concentration with Microsoft dependency</li>
+                    <li>Substantial leverage with significant refinancing needs</li>
+                    <li>Negative free cash flow requiring continued market access</li>
+                    <li>Intense competition from better-capitalized hyperscalers</li>
+                </ul>
+                
+                <p><b>Investment Recommendation:</b> Investors should approach CoreWeave debt with caution, focusing on secured instruments with strong covenants and appropriate yield compensation for the inherent risks. The company's long-term success will depend on its ability to diversify its customer base, moderate capex to generate positive free cash flow, and successfully navigate technology transitions over time.</p>
+            </section>
+            
+            <div class="action-container">
+                <a href="./page3.html" class="app-button">Begin Agentic App Development</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Revenue Growth Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'Revenue ($M)',
+                        data: [15.8, 228.9, 1920],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(54, 162, 235, 0.4)',
+                            'rgba(54, 162, 235, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Customer Mix Chart
+            const customerCtx = document.getElementById('customerMixChart').getContext('2d');
+            new Chart(customerCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Microsoft', 'Customer C', 'Other Customers'],
+                    datasets: [{
+                        data: [62, 15, 23],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.5,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '% of revenue';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cash Flow Chart
+            const cashFlowCtx = document.getElementById('cashFlowChart').getContext('2d');
+            new Chart(cashFlowCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024'],
+                    datasets: [
+                        {
+                            label: 'Operating Cash Flow ($M)',
+                            data: [0, 1800, 2750],
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Capital Expenditures ($M)',
+                            data: [-50, -3150, -8660],
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: false
+                        },
+                        y: {
+                            stacked: false
+                        }
+                    }
+                }
+            });
+            
+            // Debt Maturity Chart
+            const debtCtx = document.getElementById('debtMaturityChart').getContext('2d');
+            new Chart(debtCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2025', '2026', '2027', '2028', '2029'],
+                    datasets: [{
+                        label: 'Debt Maturities ($M)',
+                        data: [0, 0, 650, 2000, 5500],
+                        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Market Growth Chart
+            const marketGrowthCtx = document.getElementById('marketGrowthChart');
+            if (marketGrowthCtx) {
+                new Chart(marketGrowthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                        datasets: [{
+                            label: 'AI Infrastructure Market ($B)',
+                            data: [48, 76, 105, 142, 185, 235, 290, 365],
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            borderColor: 'rgba(79, 70, 229, 0.8)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 2,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Market Size (Billions USD)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Risk Radar Chart
+            const riskRadarCtx = document.getElementById('riskRadarChart');
+            if (riskRadarCtx) {
+                new Chart(riskRadarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Financial Risk',
+                            'Industry Risk',
+                            'Competitive Position', 
+                            'Customer Concentration', 
+                            'Execution Risk'
+                        ],
+                        datasets: [{
+                            label: 'CoreWeave Risk Profile',
+                            data: [70, 50, 40, 85, 60],
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: 'rgba(239, 68, 68, 0.8)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(239, 68, 68, 1)'
+                        }, {
+                            label: 'Industry Average',
+                            data: [50, 50, 50, 50, 50],
+                            backgroundColor: 'rgba(45, 212, 191, 0.2)',
+                            borderColor: 'rgba(45, 212, 191, 0.8)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(45, 212, 191, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20,
+                                    backdropColor: 'transparent'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Make sections collapsible
+            const sections = document.querySelectorAll('.collapsible');
+            sections.forEach(section => {
+                const heading = section.querySelector('h2');
+                heading.addEventListener('click', () => {
+                    section.classList.toggle('open');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

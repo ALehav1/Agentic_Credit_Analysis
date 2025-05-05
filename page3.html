@@ -3,9 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agentic Credit Analysis</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <title>Building an Agentic Credit Analysis System</title>
+    <style>
+        /* Base styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100%;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 240px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 0;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .sidebar-content {
+            padding: 24px 0;
+        }
+        
+        .workflow-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .workflow-steps li {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+        
+        .workflow-steps li.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            opacity: 1;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Main content styling */
+        .content {
+            flex: 1;
+            margin-left: 240px;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        .app-header {
+            margin-bottom: 40px;
+        }
+        
+        .app-title {
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            color: #1e293b;
+        }
+        
+        .app-subtitle {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 400;
+            color: #64748b;
+        }
+        
+        .app-section {
+            display: none;
+            margin-bottom: 40px;
+        }
+        
+        .app-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        
+        .section-description {
+            margin-bottom: 20px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        .full-width-textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            resize: vertical;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn.primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn.primary:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn.secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        
+        .btn.secondary:hover {
+            background-color: #e2e8f0;
+        }
+        
+        /* Console output styles */
+        .console-output {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            height: 360px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: none;
+            position: relative;
+        }
+        
+        .console-content {
+            position: absolute;
+            width: calc(100% - 40px);
+        }
+        
+        .build-step {
+            margin-bottom: 8px;
+            display: none;
+        }
+        
+        .build-step.visible {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-status {
+            display: inline-block;
+            margin-right: 12px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            flex: 1;
+        }
+        
+        .pending .step-status::before {
+            content: "▢";
+            color: #94a3b8;
+        }
+        
+        .in-progress .step-status::before {
+            content: "⏳";
+            color: #f59e0b;
+        }
+        
+        .completed .step-status::before {
+            content: "✅";
+            color: #10b981;
+        }
+        
+        .failed .step-status::before {
+            content: "❌";
+            color: #ef4444;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 16px;
+            display: none;
+        }
+        
+        /* Company input styling */
+        .company-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        /* Debug panel (hidden in production) */
+        .debug-panel {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #3f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        #agentic-log {
+            display: none;
+        }
+        
+        /* Completion animation */
+        .build-completion {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        
+        .pulse-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Transition message */
+        .transition-message {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        
+        /* Pulse button */
+        .pulse-button {
+            animation: pulse-button 2s infinite;
+        }
+        
+        @keyframes pulse-button {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -30,7 +350,7 @@
         
         <main class="content">
             <header class="app-header">
-                <h1 class="app-title">Agentic Credit Analysis</h1>
+                <h1 class="app-title">Building an Agentic Credit Analysis System</h1>
                 <h2 class="app-subtitle">AI-Powered Financial Assessment</h2>
             </header>
             
@@ -38,8 +358,8 @@
             <section id="step0" class="app-section active">
                 <h2 class="section-title">Define Your Requirements</h2>
                 <div class="section-content">
-                    <p class="section-description">What would you like your agentic solution to do?</p>
-                    <textarea id="user-requirements" class="full-width-textarea" rows="10" placeholder="Describe what you'd like the agentic credit analysis solution to include..."></textarea>
+                    <p class="section-description">Specify your requirements for the agentic credit analysis system. These instructions will guide our AI coding agents in developing a solution tailored to your needs.</p>
+                    <textarea id="user-requirements" class="full-width-textarea" rows="10" placeholder="Enter your instructions for building an agentic credit analysis system..."></textarea>
                     <div class="button-row">
                         <button id="see-example" class="btn primary" onclick="showExampleRequirements()">See Example Requirements</button>
                         <button id="proceed-to-instructions" class="btn secondary" onclick="proceedToInstructions()">Continue</button>
@@ -47,31 +367,83 @@
                 </div>
             </section>
             
-            <!-- Step 1: Build Solution (previously Step 2) -->
-            <section id="step2" class="app-section">
-                <h2 class="section-title">Build Agentic Solution</h2>
+            <!-- Step 1: Build Solution -->
+            <section id="step1" class="app-section">
+                <h2 class="section-title">Build Agentic Credit Analysis Solution</h2>
                 <div class="section-content">
-                    <p class="section-description">I'll now build the agentic credit analysis solution based on your requirements.</p>
+                    <p class="section-description">I'll now launch the coding agent to build a credit analysis system that orchestrates specialized agents according to your requirements.</p>
                     <div class="button-row">
-                        <button id="start-agentic-build" class="btn primary" onclick="startAgenticBuild()">Start Agentic Build</button>
+                        <button id="start-agentic-build" class="btn primary" onclick="startAgenticBuild()">Launch AI Coding Agent</button>
+                    </div>
+                    
+                    <div id="console-output" class="console-output">
+                        <div class="console-content">
+                            <div class="build-step pending" id="step-orchestration">
+                                <span class="step-status"></span>
+                                <span class="step-text">Initializing credit analysis workflow orchestration system...</span>
+                            </div>
+                            <div class="build-step pending" id="step-data">
+                                <span class="step-status"></span>
+                                <span class="step-text">Creating SEC filing and financial data extraction tools...</span>
+                            </div>
+                            <div class="build-step pending" id="step-analysis">
+                                <span class="step-status"></span>
+                                <span class="step-text">Building fundamental credit analysis methodology framework...</span>
+                            </div>
+                            <div class="build-step pending" id="step-scoring">
+                                <span class="step-status"></span>
+                                <span class="step-text">Implementing financial risk assessment scoring modules...</span>
+                            </div>
+                            <div class="build-step pending" id="step-ratios">
+                                <span class="step-status"></span>
+                                <span class="step-text">Setting up ratio calculation and financial metrics systems...</span>
+                            </div>
+                            <div class="build-step pending" id="step-benchmarks">
+                                <span class="step-status"></span>
+                                <span class="step-text">Integrating industry benchmark comparison database...</span>
+                            </div>
+                            <div class="build-step pending" id="step-forecasting">
+                                <span class="step-status"></span>
+                                <span class="step-text">Developing cash flow projection and scenario analysis tools...</span>
+                            </div>
+                            <div class="build-step pending" id="step-rating">
+                                <span class="step-status"></span>
+                                <span class="step-text">Implementing Moody's rating methodology and scorecard system...</span>
+                            </div>
+                            <div class="build-step pending" id="step-reporting">
+                                <span class="step-status"></span>
+                                <span class="step-text">Creating standardized credit report formatting templates...</span>
+                            </div>
+                            <div class="build-step pending" id="step-visuals">
+                                <span class="step-status"></span>
+                                <span class="step-text">Building data visualization and charting components...</span>
+                            </div>
+                            <div class="build-step pending" id="step-final">
+                                <span class="step-status"></span>
+                                <span class="step-text">Finalizing research agent and analytics integration system...</span>
+                            </div>
+                            <div id="success-message" class="success-message">
+                                Credit Analysis System Successfully Built
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
             
-            <!-- Step 2: Generate Assessment (previously Step 3) -->
-            <section id="step3" class="app-section">
+            <!-- Step 2: Generate Assessment -->
+            <section id="step2" class="app-section">
                 <h2 class="section-title">Generate Credit Assessment</h2>
                 <div class="section-content">
-                    <p class="section-description">Enter the company name to generate a comprehensive credit assessment report.</p>
-                    <input type="text" id="company-name" class="company-input" placeholder="Enter company name (e.g., Covidien, Pfizer)">
+                    <p class="section-description">Your agentic credit analysis system is ready! Enter a company name below to generate a comprehensive credit assessment report using the agent workflow you've built.</p>
+                    <input type="text" id="company-name" class="company-input" placeholder="Enter company name (e.g., CoreWeave, Microsoft, Apple)">
                     <div class="button-row">
-                        <button id="generate-assessment" class="btn primary" onclick="generateAssessment()">Generate Assessment</button>
+                        <button id="generate-assessment" class="btn primary" onclick="generateAssessment()">Generate Credit Report</button>
                     </div>
                 </div>
             </section>
             
             <!-- Step 3: Analysis Results -->
-            <section id="step4" class="app-section">
+            <section id="step3" class="app-section">
                 <h2 class="section-title">Credit Assessment Report</h2>
                 <div id="result-container">
                     <!-- Report will be inserted here -->
@@ -81,7 +453,7 @@
     </div>
     
     <!-- Log Area (hidden but needed for JavaScript) -->
-    <div id="agentic-log" style="display: none;"></div>
+    <div id="agentic-log"></div>
     
     <!-- Debug Panel (only shown in debug mode) -->
     <div class="debug-panel" id="debug-panel">
@@ -90,6 +462,342 @@
         <div>Active Step: <span id="debug-active-step">None</span></div>
     </div>
     
-    <script src="agentic.js"></script>
+    <script>
+        // Example requirements text
+        const exampleRequirements = `Instructions for Coding Agent to build an agentic credit analysis system:
+
+1. Gather business and financial data from company filings and reports. Conduct deep research to collect credit-relevant information about the company and its peers.
+
+2. Build credit analysis agent and instruct it to analyze both business fundamentals and financials, focusing on understanding business drivers and their impact on financial performance.
+
+3. Evaluate key credit ratios and determine profitability and cash flow profile of the company.
+
+4. Evaluate business factors that might impact financial performance in coming years and model future cash flows and ratios for the next 3 years.
+
+5. Identify and analyze industry-specific comparables to benchmark the company's performance against peers.
+
+6. Calculate implied Moody's rating based on quantitative metrics and qualitative factors.
+
+7. Create scenario analysis to test performance under different economic conditions.
+
+8. Implement insight engine to identify key strengths, weaknesses, and forward-looking indicators.
+
+9. Design visualization components for all financial metrics and trends.
+
+10. Orchestrate the reporting agent to organize all information into a standardized report format that can be rearranged by the user.
+
+Technical specifications:
+- Ensure all agents can process both structured and unstructured data
+- Implement agent communication protocols for efficient information sharing
+- Design modular architecture for easy updates to individual agents
+- Create unified data schema for consistent analysis across all agents
+- Build responsive UI components that adapt to different device sizes`;
+
+        // Show example requirements when button is clicked
+        function showExampleRequirements() {
+            document.getElementById('user-requirements').value = exampleRequirements;
+        }
+        
+        // Navigate between steps
+        function showStep(stepId) {
+            // Hide all sections
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show requested section
+            document.getElementById(stepId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.workflow-steps li').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const navItem = document.getElementById('nav-' + stepId);
+            if (navItem) navItem.classList.add('active');
+            
+            // Update debug info
+            if (document.getElementById('debug-active-step')) {
+                document.getElementById('debug-active-step').textContent = stepId;
+            }
+        }
+        
+        // Proceed to build instructions
+        function proceedToInstructions() {
+            const requirements = document.getElementById('user-requirements').value;
+            if (requirements.trim() === '') {
+                alert('Please enter your requirements or use the example.');
+                return;
+            }
+            showStep('step1');
+        }
+        
+        // Start the agentic build process with animation
+        function startAgenticBuild() {
+            // Show console output
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.style.display = 'block';
+            
+            // Disable the button during build
+            document.getElementById('start-agentic-build').disabled = true;
+            
+            // Define build steps
+            const steps = [
+                'step-orchestration',
+                'step-data',
+                'step-analysis',
+                'step-scoring',
+                'step-ratios',
+                'step-benchmarks',
+                'step-forecasting',
+                'step-rating',
+                'step-reporting',
+                'step-visuals',
+                'step-final'
+            ];
+            
+            // Hide all steps first
+            document.querySelectorAll('.build-step').forEach(step => {
+                step.classList.remove('visible');
+            });
+            
+            // Process each step with a delay
+            let currentStep = 0;
+            const consoleContent = document.querySelector('.console-content');
+            
+            function processNextStep() {
+                if (currentStep < steps.length) {
+                    const stepId = steps[currentStep];
+                    const stepElement = document.getElementById(stepId);
+                    
+                    // Make the step visible first
+                    stepElement.classList.add('visible');
+                    
+                    // Mark as in progress
+                    stepElement.classList.remove('pending');
+                    stepElement.classList.add('in-progress');
+                    
+                    // Scroll to the bottom of the console
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                    
+                    // After a delay, mark as completed
+                    setTimeout(() => {
+                        stepElement.classList.remove('in-progress');
+                        stepElement.classList.add('completed');
+                        
+                        // Process next step
+                        currentStep++;
+                        setTimeout(processNextStep, 700 + Math.random() * 400);
+                    }, 1200 + Math.random() * 600);
+                } else {
+                    // Update success message
+                    const successMessage = document.getElementById('success-message');
+                    successMessage.style.display = 'block';
+                    
+                    // After animation, transition to next step
+                    setTimeout(() => {
+                        // Show success message
+                        successMessage.textContent = 'Credit Analysis System Successfully Built';
+                        
+                        // Auto-advance to step 2 (Generate Assessment) after delay
+                        setTimeout(() => {
+                            // Show step 2 directly
+                            showStep('step2');
+                            // Ensure any animations are complete
+                            document.body.scrollTop = 0;
+                            document.documentElement.scrollTop = 0;
+                        }, 1500);
+                    }, 1000);
+                    
+                    // Scroll to the bottom of the console
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                    
+                    // Re-enable button
+                    document.getElementById('start-agentic-build').disabled = false;
+                }
+            }
+            
+            // Start processing steps
+            setTimeout(processNextStep, 500);
+        }
+        
+        // Generate the assessment report
+        function generateAssessment() {
+            const companyNameInput = document.getElementById('company-name');
+            const companyName = companyNameInput.value;
+            if (companyName.trim() === '') {
+                alert('Please enter a company name.');
+                return;
+            }
+            
+            // Clear the input field to prevent caching appearance
+            companyNameInput.value = '';
+            
+            // Show the console for generating report
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.innerHTML = '<div id="report-console" class="console-output" style="display:block;"></div>';
+            
+            const reportConsole = document.getElementById('report-console');
+            reportConsole.innerHTML = '<div class="console-content" id="report-content"></div>';
+            const reportContent = document.getElementById('report-content');
+            
+            // Show generating animation
+            showStep('step3');
+            
+            // Define the analysis steps
+            const analysisSteps = [
+                { id: 'init', text: 'Initializing credit underwriting workflow for ' + companyName + '...' },
+                { id: 'research-agent', text: 'Research agent acquiring SEC filings, earnings calls, and industry reports...' },
+                { id: 'financial-data', text: 'Extracting and normalizing financial statement data...' },
+                { id: 'ratio-analysis', text: 'Calculating liquidity, solvency, and profitability ratios...' },
+                { id: 'industry-benchmarking', text: 'Benchmarking performance against industry standards...' },
+                { id: 'analysis-agent', text: 'Analysis agent evaluating business model sustainability and competitive position...' },
+                { id: 'risk-assessment', text: 'Conducting sensitivity analysis and stress testing...' },
+                { id: 'credit-scoring', text: 'Applying credit scoring methodologies and underwriting criteria...' },
+                { id: 'report-synthesis', text: 'Synthesizing findings into comprehensive credit assessment...' }
+            ];
+            
+            // Initialize the console with all steps
+            analysisSteps.forEach(step => {
+                const stepElement = document.createElement('div');
+                stepElement.id = step.id;
+                stepElement.className = 'build-step pending';
+                stepElement.innerHTML = `<span class="step-status"></span><span class="step-text">${step.text}</span>`;
+                reportContent.appendChild(stepElement);
+            });
+            
+            // Process each step with animation
+            let currentStep = 0;
+            
+            function processAnalysisStep() {
+                if (currentStep < analysisSteps.length) {
+                    const stepId = analysisSteps[currentStep].id;
+                    const stepElement = document.getElementById(stepId);
+                    
+                    // Make the step visible
+                    stepElement.classList.add('visible');
+                    
+                    // Mark as in progress
+                    stepElement.classList.remove('pending');
+                    stepElement.classList.add('in-progress');
+                    
+                    // Scroll to the bottom of the console
+                    reportConsole.scrollTop = reportConsole.scrollHeight;
+                    
+                    // After a delay, mark as completed
+                    setTimeout(() => {
+                        stepElement.classList.remove('in-progress');
+                        stepElement.classList.add('completed');
+                        
+                        // Process next step
+                        currentStep++;
+                        setTimeout(processAnalysisStep, 800 + Math.random() * 500);
+                    }, 1000 + Math.random() * 800);
+                } else {
+                    // All steps completed
+                    setTimeout(() => {
+                        if (companyName.toLowerCase().includes('ibm')) {
+                            loadIBMReportProgressively(reportConsole);
+                        } else if (companyName.toLowerCase().includes('coreweave')) {
+                            window.location.href = 'page2.html';
+                        } else {
+                            // For demo purposes, default to IBM for any other input
+                            loadIBMReportProgressively(reportConsole);
+                        }
+                    }, 1000);
+                }
+            }
+            
+            // Start processing analysis steps with delay
+            setTimeout(processAnalysisStep, 500);
+        }
+        
+        // Function to progressively load the IBM report content
+        function loadIBMReportProgressively(container) {
+            // Clear previous console content and show loading message
+            container.innerHTML = '<div id="report-console" class="console-output" style="display:block;"></div>';
+            
+            const reportConsole = document.getElementById('report-console');
+            reportConsole.innerHTML = '<div class="console-content" id="report-loading-content"><p>Building IBM Credit Report...</p><div class="console-loading"><span></span><span></span><span></span></div></div>';
+            
+            const reportContent = document.getElementById('report-loading-content');
+            
+            // Define the report sections that will be progressively loaded
+            const reportSections = [
+                { id: 'banner', text: 'Establishing rating framework based on underwriting criteria...' },
+                { id: 'executive', text: 'Formulating executive summary with key credit considerations...' },
+                { id: 'rating', text: 'Completing Moody\'s methodology scorecard with weighted factors...' },
+                { id: 'industry', text: 'Documenting industry cyclicality and competitive dynamics...' },
+                { id: 'business', text: 'Evaluating business profile strength and revenue diversity...' },
+                { id: 'financials', text: 'Analyzing capital structure and debt service capability...' },
+                { id: 'risks', text: 'Assessing covenant headroom and downside protection...' },
+                { id: 'conclusion', text: 'Finalizing credit opinion with rating rationale...' }
+            ];
+            
+            // Add loading steps to the interface
+            reportSections.forEach(section => {
+                const sectionElement = document.createElement('div');
+                sectionElement.id = `build-${section.id}`;
+                sectionElement.className = 'build-step pending';
+                sectionElement.innerHTML = `<span class="step-status"></span><span class="step-text">${section.text}</span>`;
+                reportContent.appendChild(sectionElement);
+            });
+            
+            // Process each section with animation
+            let currentSection = 0;
+            
+            function processNextSection() {
+                if (currentSection < reportSections.length) {
+                    const sectionId = `build-${reportSections[currentSection].id}`;
+                    const sectionElement = document.getElementById(sectionId);
+                    
+                    // Make the step visible
+                    sectionElement.classList.add('visible');
+                    
+                    // Mark as in progress
+                    sectionElement.classList.remove('pending');
+                    sectionElement.classList.add('in-progress');
+                    
+                    // Scroll to the bottom of the console
+                    container.scrollTop = container.scrollHeight;
+                    
+                    // After a delay, mark as completed
+                    setTimeout(() => {
+                        sectionElement.classList.remove('in-progress');
+                        sectionElement.classList.add('completed');
+                        
+                        // Process next step
+                        currentSection++;
+                        setTimeout(processNextSection, 800 + Math.random() * 400);
+                    }, 1200 + Math.random() * 700);
+                } else {
+                    // All sections completed
+                    reportContent.innerHTML += '<div class="success-message" style="display:block;">Report generation complete! Redirecting...</div>';
+                    container.scrollTop = container.scrollHeight;
+                    
+                    // Final redirect after showing success message
+                    setTimeout(() => {
+                        window.location.href = 'ibm_report.html';
+                    }, 2000);
+                }
+            }
+            
+            // Start processing sections with delay
+            setTimeout(processNextSection, 1000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showStep('step0');
+            
+            // Add click events to navigation
+            document.querySelectorAll('.workflow-steps li').forEach(item => {
+                item.addEventListener('click', function() {
+                    const stepId = this.id.replace('nav-', '');
+                    showStep(stepId);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

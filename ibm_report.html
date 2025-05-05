@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBM Credit Assessment – May 2025</title>
+    <link rel="stylesheet" href="samples/coreweave/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        /* Custom styles for rating display */
+        .credit-rating {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .rating-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1565c0;
+            margin: 10px 0;
+        }
+        
+        .rating-description {
+            font-size: 16px;
+            color: #455a64;
+            margin-bottom: 5px;
+        }
+        
+        .rating-note {
+            font-size: 14px;
+            color: #78909c;
+            margin-top: 5px;
+        }
+        
+        .main-title {
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #455a64;
+            font-weight: normal;
+        }
+        
+        /* Call to action button at bottom */
+        .action-container {
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .app-button {
+            display: inline-block;
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .app-button:hover {
+            background-color: #1669db;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
+        
+        /* Table styling */
+        .scenario-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .scenario-table th, .scenario-table td {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        
+        .scenario-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        /* Fix chart sizes */
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        #customerMixChart {
+            max-height: 300px;
+        }
+        
+        /* Fix sidebar styling */
+        #sidebar {
+            background: #1e2a38;
+            color: #fff;
+            width: 240px;
+            min-width: 200px;
+            padding: 24px 0 0 0;
+            box-shadow: 2px 0 8px rgba(30,42,56,0.06);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1000;
+        }
+        
+        #sidebar h3 {
+            padding: 0 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+        
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+            margin: 0;
+        }
+        
+        #sidebar nav ul li {
+            margin-bottom: 16px;
+        }
+        
+        #sidebar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: block;
+            padding: 6px 0;
+        }
+        
+        #sidebar nav ul li a:hover, 
+        #sidebar nav ul li a.active {
+            color: #60a5fa;
+        }
+        
+        /* Rating scorecard styles */
+        .rating-scorecard {
+            background-color: #f5f7fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 30px 0;
+            border-left: 4px solid #0043ce;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .scorecard-header {
+            margin-bottom: 20px;
+        }
+        
+        .scorecard-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        
+        .scorecard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .scorecard-table th, .scorecard-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .scorecard-table th {
+            font-weight: 600;
+            color: #475569;
+            background-color: #f8fafc;
+        }
+        
+        .scorecard-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .factor-weight {
+            color: #64748b;
+            font-size: 13px;
+            text-align: center;
+        }
+        
+        .factor-score {
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .weighted-score {
+            text-align: center;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .final-score td {
+            color: #1e40af;
+        }
+        
+        .rating-methodology {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 12px;
+            font-style: italic;
+        }
+        
+        /* Enhanced rating scorecard styles */
+        .rating-scorecard {
+            background-color: #f0f4fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin: 30px 0;
+            border-left: 4px solid #0043ce;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .rating-banner {
+            display: flex;
+            align-items: center;
+            background-color: #f0f4fa;
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin: 0 0 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .rating-badge {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            background-color: #0043ce;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-right: 24px;
+            box-shadow: 0 2px 4px rgba(0, 67, 206, 0.2);
+        }
+        
+        .rating-details {
+            flex-grow: 1;
+        }
+        
+        .rating-details h3 {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            color: #1e293b;
+        }
+        
+        .rating-details p {
+            margin: 0 0 4px 0;
+            color: #64748b;
+        }
+        
+        .rating-date {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        /* IBM specific colors */
+        .ibm-blue {
+            color: #0043ce;
+        }
+        
+        .ibm-blue-bg {
+            background-color: #0043ce;
+        }
+        
+        /* Collapsible sections */
+        .collapsible {
+            margin-bottom: 24px;
+        }
+        
+        .collapsible h2 {
+            cursor: pointer;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .collapsible h2:after {
+            content: "+";
+            position: absolute;
+            right: 10px;
+            font-size: 24px;
+            color: #64748b;
+        }
+        
+        .collapsible.open h2:after {
+            content: "-";
+        }
+        
+        .collapsible .content {
+            display: none;
+            padding: 16px 0;
+        }
+        
+        .collapsible.open .content {
+            display: block;
+        }
+        
+        /* Sidebar buttons */
+        .sidebar-actions {
+            padding: 24px;
+        }
+        
+        .sidebar-button {
+            display: block;
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .sidebar-button:hover {
+            background-color: #1669db;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <aside id="sidebar">
+            <h3>Report Navigation</h3>
+            <nav>
+                <ul>
+                    <li><a href="#executive-summary">Executive Summary</a></li>
+                    <li><a href="#rating-analysis">Rating Analysis</a></li>
+                    <li><a href="#industry">Industry Overview</a></li>
+                    <li><a href="#business">Business Profile</a></li>
+                    <li><a href="#financials">Financial Analysis</a></li>
+                    <li><a href="#risks">Risks & Scenarios</a></li>
+                    <li><a href="#conclusion">Conclusion</a></li>
+                </ul>
+                
+                <div class="sidebar-actions">
+                    <button class="sidebar-button">Configure Report</button>
+                    <button class="sidebar-button">Save, Print or Share Report</button>
+                </div>
+            </nav>
+        </aside>
+        <main id="content">
+            <!-- Prominent Rating Banner at the very top -->
+            <div class="rating-banner">
+                <div class="rating-badge">A3</div>
+                <div class="rating-details">
+                    <h3>IBM Corporation</h3>
+                    <p>Moody's Equivalent Rating: A3 (Upper Medium Grade)</p>
+                    <p class="rating-date">Assessment Date: May 2025</p>
+                </div>
+            </div>
+            
+            <header>
+                <h1 class="main-title">IBM Credit Assessment Report</h1>
+                <p class="subtitle">Comprehensive credit assessment for debt financing considerations</p>
+            </header>
+            
+            <!-- Executive Summary Section -->
+            <section id="executive-summary" class="collapsible open">
+                <h2>Executive Summary and Credit Conclusion</h2>
+                <div class="content">
+                    <p>IBM exhibits a strong investment grade credit profile. In our shadow rating, we would place IBM around the A3 (Moody's A3) range, reflecting its established market position, strong recurring revenue streams, and conservative financial policies, partially offset by competitive pressures and ongoing business transformation. Key credit drivers include:</p>
+                    <ul>
+                        <li><strong>Strong Business Profile:</strong> IBM's global scale, broad portfolio of enterprise solutions, and focus on high-growth areas including hybrid cloud and AI provide competitive advantages.</li>
+                        <li><strong>Stable Revenue Base:</strong> High percentage of recurring revenue (~60%) from software subscriptions and services provides predictable cash flows.</li>
+                        <li><strong>Acquisition of Red Hat:</strong> Strategic $34 billion acquisition strengthened IBM's hybrid cloud capabilities and market positioning.</li>
+                        <li><strong>Solid Financial Metrics:</strong> Conservative leverage with Debt/EBITDA of ~2.7x and strong interest coverage of ~8.1x.</li>
+                        <li><strong>Spin-off of Infrastructure Services:</strong> The Kyndryl spin-off allows IBM to focus on higher-growth, higher-margin businesses.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Rating Analysis Section -->
+            <section id="rating-analysis" class="collapsible open">
+                <h2>Moody's Rating Analysis</h2>
+                <div class="content">
+                    <!-- Rating Scorecard -->
+                    <div class="rating-scorecard">
+                        <div class="scorecard-header">
+                            <h3 class="scorecard-title">Moody's Rating Scorecard: IBM</h3>
+                            <p class="scorecard-description">This rating analysis employs Moody's methodology for Technology Companies, with weighted factors that determine the final rating outcome.</p>
+                        </div>
+                        
+                        <div class="calculation-method">
+                            <p><strong>How the Rating is Calculated:</strong> Each factor is assigned a score from 1 (highest) to 5 (lowest). This score is multiplied by the factor's weight to determine its contribution to the final rating. The weighted scores are then summed to produce an aggregate score that maps to a specific rating category.</p>
+                        </div>
+                        
+                        <table class="scorecard-table">
+                            <thead>
+                                <tr>
+                                    <th>Factor</th>
+                                    <th>Weight</th>
+                                    <th>Score (1-5)</th>
+                                    <th>Weighted Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Scale (Revenue USD Billion)</td>
+                                    <td class="factor-weight">20%</td>
+                                    <td class="factor-score">1</td>
+                                    <td class="weighted-score">0.20</td>
+                                </tr>
+                                <tr>
+                                    <td>Business Profile</td>
+                                    <td class="factor-weight">20%</td>
+                                    <td class="factor-score">2</td>
+                                    <td class="weighted-score">0.40</td>
+                                </tr>
+                                <tr>
+                                    <td>Profitability</td>
+                                    <td class="factor-weight">10%</td>
+                                    <td class="factor-score">3</td>
+                                    <td class="weighted-score">0.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Leverage & Coverage</td>
+                                    <td class="factor-weight">30%</td>
+                                    <td class="factor-score">3</td>
+                                    <td class="weighted-score">0.90</td>
+                                </tr>
+                                <tr>
+                                    <td>Financial Policy</td>
+                                    <td class="factor-weight">20%</td>
+                                    <td class="factor-score">2</td>
+                                    <td class="weighted-score">0.40</td>
+                                </tr>
+                                <tr class="final-score">
+                                    <td><strong>Overall Score</strong></td>
+                                    <td class="factor-weight">100%</td>
+                                    <td></td>
+                                    <td class="weighted-score">2.20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p class="rating-methodology"><strong>Implied Rating:</strong> A3 (Moody's equivalent) based on a final score of 2.20</p>
+                        <p class="rating-methodology"><strong>Actual Moody's Senior Unsecured Rating:</strong> A3 (as of April 2024)</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Industry Overview Section -->
+            <section id="industry" class="collapsible open">
+                <h2>Industry Overview</h2>
+                <div class="content">
+                    <p>IBM operates across multiple segments of the technology industry, with primary focus on enterprise software, services, consulting, and hardware. The company has repositioned itself as a hybrid cloud and AI provider following the Kyndryl spin-off.</p>
+                    
+                    <h3>Key Industry Trends</h3>
+                    <ul>
+                        <li><strong>Hybrid Cloud Adoption:</strong> Enterprises are increasingly adopting hybrid cloud solutions, representing a $1T+ addressable market opportunity that IBM is well-positioned to capture.</li>
+                        <li><strong>AI Transformation:</strong> Generative AI and enterprise AI applications are driving significant investment across all sectors, with IBM's watsonx platform gaining traction.</li>
+                        <li><strong>Quantum Computing:</strong> IBM is an early leader in quantum computing development, with potential long-term growth opportunities.</li>
+                    </ul>
+                    
+                    <h3>Competitive Landscape</h3>
+                    <p>IBM faces competition from established enterprise technology providers and cloud hyperscalers:</p>
+                    <ul>
+                        <li><strong>Cloud Services:</strong> AWS, Microsoft Azure, and Google Cloud dominate public cloud infrastructure, while IBM focuses on hybrid cloud solutions.</li>
+                        <li><strong>Enterprise Software:</strong> Competition from Microsoft, Oracle, SAP, and Salesforce in various segments.</li>
+                        <li><strong>Consulting:</strong> Accenture, Deloitte, and other consulting firms compete with IBM Consulting.</li>
+                    </ul>
+                    
+                    <div class="chart-container">
+                        <h3>Enterprise Tech Market Growth (2023-2030)</h3>
+                        <canvas id="marketGrowthChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Business Profile Section -->
+            <section id="business" class="collapsible open">
+                <h2>Business Profile</h2>
+                <div class="content">
+                    <p>IBM is a leading global technology company with over 100 years of history, providing a broad portfolio of enterprise software, services, and hardware solutions. Following strategic restructuring, IBM now operates through three primary business segments:</p>
+                    
+                    <h3>Business Segments</h3>
+                    <ul>
+                        <li><strong>Software (~42% of revenue):</strong> Includes hybrid platform & solutions, automation, data & AI, security, and transaction processing.</li>
+                        <li><strong>Consulting (~36% of revenue):</strong> Business transformation, technology consulting, and application operations.</li>
+                        <li><strong>Infrastructure (~22% of revenue):</strong> Hybrid infrastructure, distributed infrastructure, and support.</li>
+                    </ul>
+                    
+                    <h3>Competitive Strengths</h3>
+                    <ul>
+                        <li><strong>Extensive Client Relationships:</strong> Deep relationships with 90%+ of Fortune 100 companies spanning decades.</li>
+                        <li><strong>Intellectual Property:</strong> Strong patent portfolio with leadership in emerging technologies.</li>
+                        <li><strong>Red Hat Integration:</strong> Successful integration of Red Hat enhancing IBM's hybrid cloud capabilities.</li>
+                        <li><strong>Global Reach:</strong> Extensive operations in 175+ countries with strong government and enterprise presence.</li>
+                    </ul>
+                    
+                    <div class="chart-container">
+                        <h3>Revenue Breakdown by Segment</h3>
+                        <canvas id="revenueMixChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Financial Analysis Section -->
+            <section id="financials" class="collapsible open">
+                <h2>Financial Analysis</h2>
+                <div class="content">
+                    <p>IBM maintains a solid financial profile with stable operating margins, strong free cash flow generation, and a commitment to its investment grade rating.</p>
+                    
+                    <h3>Key Financial Metrics</h3>
+                    <table class="scenario-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>FY 2023</th>
+                                <th>FY 2024</th>
+                                <th>FY 2025 (Est.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Revenue (USD Billions)</td>
+                                <td>61.9</td>
+                                <td>63.2</td>
+                                <td>65.8</td>
+                            </tr>
+                            <tr>
+                                <td>Adj. EBITDA Margin</td>
+                                <td>23.5%</td>
+                                <td>24.2%</td>
+                                <td>25.0%</td>
+                            </tr>
+                            <tr>
+                                <td>Free Cash Flow (USD Billions)</td>
+                                <td>9.3</td>
+                                <td>10.1</td>
+                                <td>10.7</td>
+                            </tr>
+                            <tr>
+                                <td>Debt/EBITDA</td>
+                                <td>2.9x</td>
+                                <td>2.7x</td>
+                                <td>2.5x</td>
+                            </tr>
+                            <tr>
+                                <td>Interest Coverage</td>
+                                <td>7.6x</td>
+                                <td>8.1x</td>
+                                <td>8.5x</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>Financial Policy</h3>
+                    <p>IBM maintains a conservative financial policy focused on:</p>
+                    <ul>
+                        <li><strong>Dividend Priority:</strong> Long history of dividend payments (28 consecutive years of dividend increases).</li>
+                        <li><strong>Debt Reduction:</strong> Commitment to reducing leverage following the Red Hat acquisition.</li>
+                        <li><strong>Strategic M&A:</strong> Targeted acquisitions in hybrid cloud, AI, and quantum computing.</li>
+                        <li><strong>Investment Grade Rating:</strong> Clear commitment to maintaining solid investment grade ratings.</li>
+                    </ul>
+                    
+                    <div class="chart-container">
+                        <h3>Historical Leverage Trends</h3>
+                        <canvas id="leverageChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Risks & Scenarios Section -->
+            <section id="risks" class="collapsible open">
+                <h2>Risks & Scenarios</h2>
+                <div class="content">
+                    <h3>Key Credit Risks</h3>
+                    <ul>
+                        <li><strong>Competitive Pressures:</strong> Intense competition from cloud hyperscalers and specialized software providers.</li>
+                        <li><strong>Technology Disruption:</strong> Rapid technological changes requiring continuous innovation and investment.</li>
+                        <li><strong>Integration Risk:</strong> Potential challenges in integrating acquired companies and technologies.</li>
+                        <li><strong>Legacy Business Decline:</strong> Declining revenue in traditional hardware and services segments.</li>
+                        <li><strong>Economic Sensitivity:</strong> Exposure to enterprise IT spending cycles during economic downturns.</li>
+                    </ul>
+                    
+                    <div class="chart-container">
+                        <h3>IBM Risk Assessment</h3>
+                        <canvas id="riskRadarChart"></canvas>
+                    </div>
+                    
+                    <h3>Scenario Analysis</h3>
+                    <table class="scenario-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Probability</th>
+                                <th>Impact on Credit Metrics</th>
+                                <th>Potential Rating Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Base Case:</strong> Sustained 3-4% revenue growth, stable margins, continued debt reduction</td>
+                                <td>60%</td>
+                                <td>Leverage decreases to 2.3-2.5x; interest coverage improves to 8.5-9.0x</td>
+                                <td>Stable at A3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Upside Case:</strong> Accelerated hybrid cloud/AI adoption, margin expansion to 26-27%</td>
+                                <td>25%</td>
+                                <td>Leverage decreases to below 2.0x; interest coverage above 10x</td>
+                                <td>Potential upgrade to A2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Downside Case:</strong> Increased competitive pressure, IT spending slowdown, margin compression</td>
+                                <td>15%</td>
+                                <td>Leverage increases to 3.0-3.5x; interest coverage declines to 6-7x</td>
+                                <td>Potential downgrade to Baa1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Conclusion Section -->
+            <section id="conclusion" class="collapsible open">
+                <h2>Conclusion</h2>
+                <div class="content">
+                    <p>IBM maintains a solid investment-grade credit profile with an implied Moody's rating of A3. The company's credit strengths include its global scale, deep client relationships, strong recurring revenue base, and conservative financial policies. These strengths are partially offset by competitive pressures in the rapidly evolving technology landscape and the ongoing transition toward higher-growth segments.</p>
+                    
+                    <p>IBM's strategic focus on hybrid cloud and AI positions it well to capitalize on enterprise digital transformation. While facing competition from cloud hyperscalers, IBM's differentiated approach and broad portfolio provide competitive advantages in the enterprise segment. The company's commitment to maintaining its investment grade rating through disciplined financial management should support credit stability going forward.</p>
+                    
+                    <p>Based on our assessment, IBM exhibits a stable credit outlook with key monitoring points including:</p>
+                    <ul>
+                        <li>Execution of the hybrid cloud and AI strategy</li>
+                        <li>Margin evolution as business mix shifts</li>
+                        <li>Pace of debt reduction and capital allocation priorities</li>
+                        <li>Competitive dynamics in the enterprise cloud and AI markets</li>
+                    </ul>
+                    
+                    <div class="action-container">
+                        <a href="page3.html" class="app-button">Return to Agentic App Development</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make sections collapsible
+            const sections = document.querySelectorAll('.collapsible');
+            sections.forEach(section => {
+                // Make sure all sections are open by default
+                section.querySelector('.content').style.display = 'block';
+                
+                const heading = section.querySelector('h2');
+                heading.addEventListener('click', () => {
+                    section.classList.toggle('open');
+                    const content = section.querySelector('.content');
+                    if (section.classList.contains('open')) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Automatically open section if it matches the hash in the URL
+            if (window.location.hash) {
+                const targetSection = document.querySelector(window.location.hash);
+                if (targetSection) {
+                    targetSection.classList.add('open');
+                    targetSection.querySelector('.content').style.display = 'block';
+                    targetSection.scrollIntoView();
+                }
+            }
+            
+            // Set up click handling for sidebar navigation
+            document.querySelectorAll('#sidebar a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('open');
+                        targetSection.querySelector('.content').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Revenue Mix Chart
+            const revenueMixCtx = document.getElementById('revenueMixChart');
+            if (revenueMixCtx) {
+                new Chart(revenueMixCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Software', 'Consulting', 'Infrastructure'],
+                        datasets: [{
+                            data: [42, 36, 22],
+                            backgroundColor: [
+                                'rgba(0, 67, 206, 0.8)',
+                                'rgba(64, 131, 255, 0.8)',
+                                'rgba(141, 180, 255, 0.8)'
+                            ],
+                            borderColor: 'white',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.raw + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Market Growth Chart
+            const marketGrowthCtx = document.getElementById('marketGrowthChart');
+            if (marketGrowthCtx) {
+                new Chart(marketGrowthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                        datasets: [{
+                            label: 'Hybrid Cloud ($ Trillion)',
+                            data: [0.8, 0.95, 1.15, 1.35, 1.55, 1.75, 1.95, 2.15],
+                            backgroundColor: 'rgba(0, 67, 206, 0.1)',
+                            borderColor: 'rgba(0, 67, 206, 0.8)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }, {
+                            label: 'Enterprise AI ($ Billion)',
+                            data: [50, 95, 160, 230, 300, 370, 440, 510],
+                            backgroundColor: 'rgba(64, 131, 255, 0.1)',
+                            borderColor: 'rgba(64, 131, 255, 0.8)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true,
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 2,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Hybrid Cloud ($ Trillion)'
+                                }
+                            },
+                            y1: {
+                                beginAtZero: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Enterprise AI ($ Billion)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Leverage Chart
+            const leverageCtx = document.getElementById('leverageChart');
+            if (leverageCtx) {
+                new Chart(leverageCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Est.)'],
+                        datasets: [{
+                            label: 'Debt/EBITDA',
+                            data: [3.5, 3.2, 3.0, 2.9, 2.7, 2.5],
+                            backgroundColor: 'rgba(0, 67, 206, 0.7)',
+                            borderColor: 'rgba(0, 67, 206, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Debt/EBITDA (x)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Risk Radar Chart
+            const riskRadarCtx = document.getElementById('riskRadarChart');
+            if (riskRadarCtx) {
+                new Chart(riskRadarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Competitive Position',
+                            'Financial Strength',
+                            'Technology Leadership', 
+                            'Business Diversification', 
+                            'Growth Potential'
+                        ],
+                        datasets: [{
+                            label: 'IBM Risk Profile',
+                            data: [75, 85, 80, 70, 65],
+                            backgroundColor: 'rgba(0, 67, 206, 0.2)',
+                            borderColor: 'rgba(0, 67, 206, 0.8)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(0, 67, 206, 1)'
+                        }, {
+                            label: 'Industry Average',
+                            data: [60, 60, 60, 60, 60],
+                            backgroundColor: 'rgba(45, 212, 191, 0.2)',
+                            borderColor: 'rgba(45, 212, 191, 0.8)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(45, 212, 191, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 20,
+                                    backdropColor: 'transparent'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
